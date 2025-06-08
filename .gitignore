@@ -363,3 +363,4 @@ MigrationBackup/
 FodyWeavers.xsd
 
 /SkinHolderAPI/appsettings.Production.json
+/SkinHolderAPI/estructura.md
