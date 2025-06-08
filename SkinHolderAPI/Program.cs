@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+using SkinHolderAPI.DataService.Contexts;
 
 namespace SkinHolderAPI
 {
@@ -11,6 +13,16 @@ namespace SkinHolderAPI
             
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            builder.Services.AddDbContext<SkinHolderDbContext>(options =>
+                options.UseMySql(
+                    builder.Configuration.GetConnectionString("DefaultConnection"),
+                    new MySqlServerVersion(new Version(8, 0, 42))));
+
+            builder.Services.AddDbContext<SkinHolderLogDbContext>(options =>
+                options.UseMySql(
+                    builder.Configuration.GetConnectionString("LogConnection"),
+                    new MySqlServerVersion(new Version(8, 0, 42))));
 
             var app = builder.Build();
 
