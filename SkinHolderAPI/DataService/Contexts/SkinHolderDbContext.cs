@@ -114,7 +114,13 @@ public partial class SkinHolderDbContext : DbContext
             entity.ToTable("users");
 
             entity.Property(e => e.UserId).HasColumnName("UserID");
-            entity.Property(e => e.PasswordHash).HasMaxLength(70);
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasColumnType("datetime");
+            entity.Property(e => e.IsActive)
+                .IsRequired()
+                .HasDefaultValueSql("'1'");
+            entity.Property(e => e.PasswordHash).HasMaxLength(128);
             entity.Property(e => e.Username).HasMaxLength(20);
         });
 

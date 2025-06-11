@@ -11,6 +11,12 @@ public partial class User
 
     public string PasswordHash { get; set; } = null!;
 
+    public bool? IsActive { get; set; }
+
+    public bool IsBanned { get; set; }
+
+    public DateTime CreatedAt { get; set; }
+
     public virtual ICollection<Registro> Registros { get; set; } = new List<Registro>();
 
     public virtual ICollection<Useritem> Useritems { get; set; } = new List<Useritem>();
