@@ -3,15 +3,15 @@ using System.Collections.Generic;
 
 namespace SkinHolderAPI.Models;
 
-public partial class user
+public partial class User
 {
-    public int UserID { get; set; }
+    public int UserId { get; set; }
 
     public string Username { get; set; } = null!;
 
     public string PasswordHash { get; set; } = null!;
 
-    public virtual ICollection<registro> registros { get; set; } = new List<registro>();
+    public virtual ICollection<Registro> Registros { get; set; } = new List<Registro>();
 
-    public virtual ICollection<useritem> useritems { get; set; } = new List<useritem>();
+    public virtual ICollection<Useritem> Useritems { get; set; } = new List<Useritem>();
 }

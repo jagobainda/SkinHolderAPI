@@ -3,21 +3,21 @@ using System.Collections.Generic;
 
 namespace SkinHolderAPI.Models;
 
-public partial class useritem
+public partial class Useritem
 {
-    public long UserItemID { get; set; }
+    public long UserItemId { get; set; }
 
     public int Cantidad { get; set; }
 
     public decimal PrecioMedioCompra { get; set; }
 
-    public int ItemID { get; set; }
+    public int ItemId { get; set; }
 
-    public int UserID { get; set; }
+    public int UserId { get; set; }
 
-    public virtual item Item { get; set; } = null!;
+    public virtual Item Item { get; set; } = null!;
 
-    public virtual user User { get; set; } = null!;
+    public virtual ICollection<Itemprecio> Itemprecios { get; set; } = new List<Itemprecio>();
 
-    public virtual ICollection<itemprecio> itemprecios { get; set; } = new List<itemprecio>();
+    public virtual User User { get; set; } = null!;
 }

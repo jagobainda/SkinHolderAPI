@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 namespace SkinHolderAPI.Models;
 
-public partial class registrotype
+public partial class Registrotype
 {
-    public int RegistroTypeID { get; set; }
+    public int RegistroTypeId { get; set; }
 
     public string? Type { get; set; }
 
-    public virtual ICollection<registro> registros { get; set; } = new List<registro>();
+    public virtual ICollection<Registro> Registros { get; set; } = new List<Registro>();
 }

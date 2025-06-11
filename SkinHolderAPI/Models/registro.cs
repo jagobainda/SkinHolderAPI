@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace SkinHolderAPI.Models;
 
-public partial class registro
+public partial class Registro
 {
-    public long RegistroID { get; set; }
+    public long RegistroId { get; set; }
 
     public DateTime FechaHora { get; set; }
 
@@ -13,13 +13,13 @@ public partial class registro
 
     public decimal TotalGamerPay { get; set; }
 
-    public int UserID { get; set; }
+    public int UserId { get; set; }
 
-    public int RegistroTypeID { get; set; }
+    public int RegistroTypeId { get; set; }
 
-    public virtual registrotype RegistroType { get; set; } = null!;
+    public virtual ICollection<Itemprecio> Itemprecios { get; set; } = new List<Itemprecio>();
 
-    public virtual user User { get; set; } = null!;
+    public virtual Registrotype RegistroType { get; set; } = null!;
 
-    public virtual ICollection<itemprecio> itemprecios { get; set; } = new List<itemprecio>();
+    public virtual User User { get; set; } = null!;
 }

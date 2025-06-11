@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace SkinHolderAPI.Models;
 
-public partial class item
+public partial class Item
 {
-    public int ItemID { get; set; }
+    public int ItemId { get; set; }
 
     public string Nombre { get; set; } = null!;
 
@@ -13,5 +13,5 @@ public partial class item
 
     public string GamerPayNombre { get; set; } = null!;
 
-    public virtual ICollection<useritem> useritems { get; set; } = new List<useritem>();
+    public virtual ICollection<Useritem> Useritems { get; set; } = new List<Useritem>();
 }

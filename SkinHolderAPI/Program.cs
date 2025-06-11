@@ -1,45 +1,76 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using SkinHolderAPI.Application;
 using SkinHolderAPI.DataService.Contexts;
+using System.Text;
 
-namespace SkinHolderAPI
+namespace SkinHolderAPI;
+
+public class Program
 {
-    public class Program
+    public static void Main(string[] args)
     {
-        public static void Main(string[] args)
+        var builder = WebApplication.CreateBuilder(args);
+
+        builder.Services.AddControllers();
+
+        builder.Services.AddEndpointsApiExplorer();
+        builder.Services.AddSwaggerGen();
+
+        builder.Services.AddDbContext<SkinHolderDbContext>(options =>
+            options.UseMySql(
+                builder.Configuration.GetConnectionString("DefaultConnection"),
+                new MySqlServerVersion(new Version(8, 0, 42))));
+
+        builder.Services.AddDbContext<SkinHolderLogDbContext>(options =>
+            options.UseMySql(
+                builder.Configuration.GetConnectionString("LogConnection"),
+                new MySqlServerVersion(new Version(8, 0, 42))));
+
+        builder.Services.AddApplicationServices();
+
+        var jwtConfig = builder.Configuration.GetSection("Jwt");
+        var key = Encoding.UTF8.GetBytes(jwtConfig["Key"]!);
+
+        builder.Services.AddAuthentication(options =>
         {
-            var builder = WebApplication.CreateBuilder(args);
-
-            builder.Services.AddControllers();
-            
-            builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
-
-            builder.Services.AddDbContext<SkinHolderDbContext>(options =>
-                options.UseMySql(
-                    builder.Configuration.GetConnectionString("DefaultConnection"),
-                    new MySqlServerVersion(new Version(8, 0, 42))));
-
-            builder.Services.AddDbContext<SkinHolderLogDbContext>(options =>
-                options.UseMySql(
-                    builder.Configuration.GetConnectionString("LogConnection"),
-                    new MySqlServerVersion(new Version(8, 0, 42))));
-
-            var app = builder.Build();
-
-            if (app.Environment.IsDevelopment())
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        })
+        .AddJwtBearer(options =>
+        {
+            options.RequireHttpsMetadata = false;
+            options.SaveToken = true;
+            options.TokenValidationParameters = new TokenValidationParameters
             {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = jwtConfig["Issuer"],
+                ValidAudience = jwtConfig["Audience"],
+                IssuerSigningKey = new SymmetricSecurityKey(key)
+            };
+        });
 
-            app.UseHttpsRedirection();
+        builder.Services.AddAuthorization();
 
-            app.UseAuthorization();
+        var app = builder.Build();
 
-
-            app.MapControllers();
-
-            app.Run();
+        if (app.Environment.IsDevelopment())
+        {
+            app.UseSwagger();
+            app.UseSwaggerUI();
         }
+
+        app.UseHttpsRedirection();
+
+        app.UseAuthentication();
+        app.UseAuthorization();
+
+        app.MapControllers();
+
+        app.Run();
     }
 }

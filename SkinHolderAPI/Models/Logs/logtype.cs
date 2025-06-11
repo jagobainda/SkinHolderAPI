@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 namespace SkinHolderAPI.Models.Logs;
 
-public partial class logtype
+public partial class Logtype
 {
-    public int LogTypeID { get; set; }
+    public int LogTypeId { get; set; }
 
     public string TypeName { get; set; } = null!;
 
-    public virtual ICollection<logger> loggers { get; set; } = new List<logger>();
+    public virtual ICollection<Logger> Loggers { get; set; } = new List<Logger>();
 }

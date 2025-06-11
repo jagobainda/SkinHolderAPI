@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace SkinHolderAPI.Models.Logs;
 
-public partial class logger
+public partial class Logger
 {
     public long LoggerId { get; set; }
 
@@ -11,15 +11,15 @@ public partial class logger
 
     public DateTime LogDateTime { get; set; }
 
-    public int LogTypeID { get; set; }
+    public int LogTypeId { get; set; }
 
-    public int LogPlaceID { get; set; }
+    public int LogPlaceId { get; set; }
 
-    public int UserID { get; set; }
+    public int UserId { get; set; }
 
-    public virtual logplace LogPlace { get; set; } = null!;
+    public virtual Logplace LogPlace { get; set; } = null!;
 
-    public virtual logtype LogType { get; set; } = null!;
+    public virtual Logtype LogType { get; set; } = null!;
 
-    public virtual user User { get; set; } = null!;
+    public virtual User User { get; set; } = null!;
 }
