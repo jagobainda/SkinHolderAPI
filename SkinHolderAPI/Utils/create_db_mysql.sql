@@ -4,25 +4,21 @@ CREATE DATABASE skinholderlog CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 USE skinholderlog;
 
--- Creación de la tabla users
 CREATE TABLE users (
     userid INTEGER PRIMARY KEY AUTO_INCREMENT,
     username VARCHAR(30) NOT NULL
 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
--- Creación de la tabla logtype
 CREATE TABLE logtype (
     logtypeid INTEGER PRIMARY KEY AUTO_INCREMENT,
     typename VARCHAR(7) NOT NULL
 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
--- Creación de la tabla logplace
 CREATE TABLE logplace (
     logplaceid INTEGER PRIMARY KEY AUTO_INCREMENT,
     placename VARCHAR(7) NOT NULL
 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
--- Creación de la tabla logger
 CREATE TABLE logger (
     loggerid BIGINT PRIMARY KEY AUTO_INCREMENT,
     logdescription VARCHAR(5000) NOT NULL,
@@ -48,10 +44,8 @@ INSERT INTO logplace (placename) VALUES
 DROP DATABASE IF EXISTS skinholderdb;
 
 CREATE DATABASE skinholderdb CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
 USE skinholderdb;
 
--- Creación de la tabla users
 CREATE TABLE users (
     userid INTEGER PRIMARY KEY AUTO_INCREMENT,
     username VARCHAR(30) NOT NULL,
@@ -61,7 +55,6 @@ CREATE TABLE users (
     createdat DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
--- Creación de la tabla items
 CREATE TABLE items (
     itemid INTEGER PRIMARY KEY AUTO_INCREMENT,
     nombre VARCHAR(100) NOT NULL,
@@ -69,7 +62,6 @@ CREATE TABLE items (
     gamerpaynombre VARCHAR(300) NOT NULL
 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
--- Creación de la tabla useritems
 CREATE TABLE useritems (
     useritemid BIGINT PRIMARY KEY AUTO_INCREMENT,
     cantidad INTEGER NOT NULL,
@@ -80,13 +72,11 @@ CREATE TABLE useritems (
     CONSTRAINT fk_userid_useritems FOREIGN KEY (userid) REFERENCES users(userid)
 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
--- Creación de la tabla registrotType
 CREATE TABLE registrotype (
     registrotypeid INTEGER PRIMARY KEY AUTO_INCREMENT,
     type VARCHAR(8) NOT NULL
 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
--- Creación de la tabla registros
 CREATE TABLE registros (
     registroid BIGINT PRIMARY KEY AUTO_INCREMENT,
     fechahora DATETIME NOT NULL,
@@ -95,10 +85,9 @@ CREATE TABLE registros (
     userid INTEGER NOT NULL,
     registrotypeid INTEGER NOT NULL,
     CONSTRAINT fk_userid_registros FOREIGN KEY (userid) REFERENCES users(userid),
-    CONSTRAINT fk_userid_registrotype FOREIGN KEY (registrotypeid) REFERENCES registrotType(registrotTypeid)
+    CONSTRAINT fk_registrotypeid_registros FOREIGN KEY (registrotypeid) REFERENCES registrotype(registrotypeid)
 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
--- Creación de la tabla itemprecio
 CREATE TABLE itemprecio (
     itemprecioid BIGINT PRIMARY KEY AUTO_INCREMENT,
     preciosteam DECIMAL(10, 2) NOT NULL,
@@ -109,7 +98,7 @@ CREATE TABLE itemprecio (
     CONSTRAINT fk_registroid_itemprecio FOREIGN KEY (registroid) REFERENCES registros(registroid)
 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
-INSERT INTO registrotType (type) VALUES
+INSERT INTO registrotype (type) VALUES
     ('STEAM'),
     ('GAMERPAY'),
     ('ALL');
