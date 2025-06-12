@@ -1,8 +1,8 @@
-DROP DATABASE IF EXISTS skinholderlog;
+DROP DATABASE IF EXISTS SkinHolderLog;
 
-CREATE DATABASE skinholderlog CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE DATABASE SkinHolderLog CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
-USE skinholderlog;
+USE SkinHolderLog;
 
 CREATE TABLE users (
     userid INTEGER PRIMARY KEY AUTO_INCREMENT,
@@ -41,10 +41,10 @@ INSERT INTO logplace (placename) VALUES
     ('ANDROID'),
     ('API');
 
-DROP DATABASE IF EXISTS skinholderdb;
+DROP DATABASE IF EXISTS SkinHolderDB;
 
-CREATE DATABASE skinholderdb CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE skinholderdb;
+CREATE DATABASE SkinHolderDB CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE SkinHolderDB;
 
 CREATE TABLE users (
     userid INTEGER PRIMARY KEY AUTO_INCREMENT,
@@ -103,7 +103,7 @@ INSERT INTO registrotype (type) VALUES
     ('GAMERPAY'),
     ('ALL');
 
-USE skinholderlog;
+USE SkinHolderLog;
 
 DELIMITER $$
 
