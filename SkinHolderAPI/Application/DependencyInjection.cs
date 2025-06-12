@@ -1,4 +1,5 @@
 ﻿using SkinHolderAPI.Application.Login;
+using SkinHolderAPI.Application.Security;
 using SkinHolderAPI.Application.Users;
 using SkinHolderAPI.DataService.Users;
 
@@ -13,6 +14,7 @@ namespace SkinHolderAPI.Application
 
             // BusinessLogics
             services.AddScoped<ITokenLogic, TokenLogic>();
+            services.AddScoped<IRateLimitLogic, RateLimitLogic>();
             services.AddScoped<IUserLogic, UserLogic>();
 
             // Singletons

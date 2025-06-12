@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SkinHolderAPI.Application.Users;
+using SkinHolderAPI.Attributes;
 using SkinHolderAPI.DTOs.Login;
 
 namespace SkinHolderAPI.Controllers;
@@ -12,6 +13,7 @@ public class AuthController(IUserLogic userLogic) : ControllerBase
 
 
     [HttpPost("login")]
+    [Limit(5)]
     public async Task<IActionResult> Login([FromBody] LoginDto dto)
     {
         var result = await _userLogic.LoginAsync(dto);
