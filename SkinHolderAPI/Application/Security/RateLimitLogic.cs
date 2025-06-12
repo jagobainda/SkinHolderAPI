@@ -9,37 +9,23 @@ public interface IRateLimitLogic
 
 public class RateLimitLogic : IRateLimitLogic
 {
-    private class RequestCounter
-    {
-        public int Count;
-        public DateTime PeriodStart;
-    }
-
-    private readonly ConcurrentDictionary<string, RequestCounter> _requests = new();
+    private readonly ConcurrentDictionary<string, List<DateTime>> _requests = new();
 
     public Task<bool> IsAllowedAsync(string key, int limit)
     {
         var now = DateTime.UtcNow;
         var window = TimeSpan.FromMinutes(1);
 
-        var counter = _requests.GetOrAdd(key, _ => new RequestCounter { Count = 0, PeriodStart = now });
+        var timestamps = _requests.GetOrAdd(key, _ => new List<DateTime>());
 
-        lock (counter)
+        lock (timestamps)
         {
-            if (now - counter.PeriodStart > window)
-            {
-                counter.Count = 1;
-                counter.PeriodStart = now;
-                return Task.FromResult(true);
-            }
+            timestamps.RemoveAll(ts => (now - ts) > window);
 
-            if (counter.Count < limit)
-            {
-                counter.Count++;
-                return Task.FromResult(true);
-            }
+            if (timestamps.Count >= limit) return Task.FromResult(false);
 
-            return Task.FromResult(false);
+            timestamps.Add(now);
+            return Task.FromResult(true);
         }
     }
 }
