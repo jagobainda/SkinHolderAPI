@@ -14,7 +14,7 @@ namespace SkinHolderAPI.Application
 
             // BusinessLogics
             services.AddScoped<ITokenLogic, TokenLogic>();
-            services.AddScoped<IRateLimitLogic, RateLimitLogic>();
+            services.AddSingleton<IRateLimitLogic, RateLimitLogic>();
             services.AddScoped<IUserLogic, UserLogic>();
 
             // Singletons
