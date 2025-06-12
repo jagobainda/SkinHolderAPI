@@ -5,7 +5,7 @@ using SkinHolderAPI.DTOs.Login;
 namespace SkinHolderAPI.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("[controller]")]
 public class AuthController(IUserLogic userLogic) : ControllerBase
 {
     private readonly IUserLogic _userLogic = userLogic;

@@ -1,126 +1,126 @@
-DROP DATABASE IF EXISTS SkinHolderLog;
+DROP DATABASE IF EXISTS skinholderlog;
 
-CREATE DATABASE SkinHolderLog CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE DATABASE skinholderlog CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
-USE SkinHolderLog;
+USE skinholderlog;
 
--- Creación de la tabla Users
-CREATE TABLE Users(
-    UserID INTEGER PRIMARY KEY AUTO_INCREMENT,
-    Username VARCHAR(30) NOT NULL
+-- Creación de la tabla users
+CREATE TABLE users (
+    userid INTEGER PRIMARY KEY AUTO_INCREMENT,
+    username VARCHAR(30) NOT NULL
 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
--- Creación de la tabla LogType
-CREATE TABLE LogType(
-    LogTypeID INTEGER PRIMARY KEY AUTO_INCREMENT,
-    TypeName VARCHAR(7) NOT NULL
+-- Creación de la tabla logtype
+CREATE TABLE logtype (
+    logtypeid INTEGER PRIMARY KEY AUTO_INCREMENT,
+    typename VARCHAR(7) NOT NULL
 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
--- Creación de la tabla LogPlace
-CREATE TABLE LogPlace(
-    LogPlaceID INTEGER PRIMARY KEY AUTO_INCREMENT,
-    PlaceName VARCHAR(7) NOT NULL
+-- Creación de la tabla logplace
+CREATE TABLE logplace (
+    logplaceid INTEGER PRIMARY KEY AUTO_INCREMENT,
+    placename VARCHAR(7) NOT NULL
 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
-
--- Creación de la tabla Logger
-CREATE TABLE Logger(
-    LoggerId BIGINT PRIMARY KEY AUTO_INCREMENT,
-    LogDescription VARCHAR(5000) NOT NULL,
-    LogDateTime DATETIME NOT NULL,
-    LogTypeID INTEGER NOT NULL,
-    LogPlaceID INTEGER NOT NULL,
-    UserID INTEGER NOT NULL,
-    CONSTRAINT fk_LogTypeID_LogType FOREIGN KEY (LogTypeID) REFERENCES LogType(LogTypeID),
-    CONSTRAINT fk_LogPlaceID_LogPlace FOREIGN KEY (LogPlaceID) REFERENCES LogPlace(LogPlaceID),
-    CONSTRAINT fk_UserID_Logger FOREIGN KEY (UserID) REFERENCES Users(UserID)
+-- Creación de la tabla logger
+CREATE TABLE logger (
+    loggerid BIGINT PRIMARY KEY AUTO_INCREMENT,
+    logdescription VARCHAR(5000) NOT NULL,
+    logdatetime DATETIME NOT NULL,
+    logtypeid INTEGER NOT NULL,
+    logplaceid INTEGER NOT NULL,
+    userid INTEGER NOT NULL,
+    CONSTRAINT fk_logtypeid_logtype FOREIGN KEY (logtypeid) REFERENCES logtype(logtypeid),
+    CONSTRAINT fk_logplaceid_logplace FOREIGN KEY (logplaceid) REFERENCES logplace(logplaceid),
+    CONSTRAINT fk_userid_logger FOREIGN KEY (userid) REFERENCES users(userid)
 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
-INSERT INTO LogType (TypeName) VALUES
+INSERT INTO logtype (typename) VALUES
     ('INFO'),
     ('WARNING'),
     ('ERROR');
 
-INSERT INTO LogPlace (PlaceName) VALUES
+INSERT INTO logplace (placename) VALUES
     ('WPF'),
     ('ANDROID'),
     ('API');
 
-DROP DATABASE IF EXISTS SkinHolderDB;
+DROP DATABASE IF EXISTS skinholderdb;
 
-CREATE DATABASE SkinHolderDB CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE SkinHolderDB;
+CREATE DATABASE skinholderdb CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
--- Creación de la tabla Users
-CREATE TABLE Users (
-    UserID INTEGER PRIMARY KEY AUTO_INCREMENT,
-    Username VARCHAR(30) NOT NULL,
-    PasswordHash VARCHAR(128) NOT NULL,
-    IsActive BOOLEAN NOT NULL DEFAULT TRUE, 
-    IsBanned BOOLEAN NOT NULL DEFAULT FALSE,
-    CreatedAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+USE skinholderdb;
+
+-- Creación de la tabla users
+CREATE TABLE users (
+    userid INTEGER PRIMARY KEY AUTO_INCREMENT,
+    username VARCHAR(30) NOT NULL,
+    passwordhash VARCHAR(128) NOT NULL,
+    isactive BOOLEAN NOT NULL DEFAULT TRUE,
+    isbanned BOOLEAN NOT NULL DEFAULT FALSE,
+    createdat DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
--- Creación de la tabla Items
-CREATE TABLE Items(
-    ItemID INTEGER PRIMARY KEY AUTO_INCREMENT,
-    Nombre VARCHAR(100) NOT NULL,
-    HashNameSteam VARCHAR(300) NOT NULL,
-    GamerPayNombre VARCHAR(300) NOT NULL
+-- Creación de la tabla items
+CREATE TABLE items (
+    itemid INTEGER PRIMARY KEY AUTO_INCREMENT,
+    nombre VARCHAR(100) NOT NULL,
+    hashnamesteam VARCHAR(300) NOT NULL,
+    gamerpaynombre VARCHAR(300) NOT NULL
 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
--- Creación de la tabla UserItems
-CREATE TABLE UserItems(
-    UserItemID BIGINT PRIMARY KEY AUTO_INCREMENT,
-    Cantidad INTEGER NOT NULL,
-    PrecioMedioCompra DECIMAL(10, 2) NOT NULL,
-    ItemID INTEGER NOT NULL,
-    UserID INTEGER NOT NULL,
-    CONSTRAINT fk_ItemID_UserItems FOREIGN KEY (ItemID) REFERENCES Items(ItemID),
-    CONSTRAINT fk_UserID_UserItems FOREIGN KEY (UserID) REFERENCES Users(UserID)
+-- Creación de la tabla useritems
+CREATE TABLE useritems (
+    useritemid BIGINT PRIMARY KEY AUTO_INCREMENT,
+    cantidad INTEGER NOT NULL,
+    preciomediocompra DECIMAL(10, 2) NOT NULL,
+    itemid INTEGER NOT NULL,
+    userid INTEGER NOT NULL,
+    CONSTRAINT fk_itemid_useritems FOREIGN KEY (itemid) REFERENCES items(itemid),
+    CONSTRAINT fk_userid_useritems FOREIGN KEY (userid) REFERENCES users(userid)
 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
--- Creación de la tabla RegistroType
-CREATE TABLE RegistroType(
-    RegistroTypeID INTEGER PRIMARY KEY AUTO_INCREMENT,
-    Type VARCHAR(8) NOT NULL
+-- Creación de la tabla registrotType
+CREATE TABLE registrotype (
+    registrotypeid INTEGER PRIMARY KEY AUTO_INCREMENT,
+    type VARCHAR(8) NOT NULL
 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
--- Creación de la tabla Registros
-CREATE TABLE Registros(
-    RegistroID BIGINT PRIMARY KEY AUTO_INCREMENT,
-    FechaHora DATETIME NOT NULL,
-    TotalSteam DECIMAL(10, 2) NOT NULL,
-    TotalGamerPay DECIMAL(10, 2) NOT NULL,
-    UserID INTEGER NOT NULL,
-    RegistroTypeID INTEGER NOT NULL,
-    CONSTRAINT fk_UserID_Registros FOREIGN KEY (UserID) REFERENCES Users(UserID),
-    CONSTRAINT fk_UserID_RegistroType FOREIGN KEY (RegistroTypeID) REFERENCES RegistroType(RegistroTypeID)
+-- Creación de la tabla registros
+CREATE TABLE registros (
+    registroid BIGINT PRIMARY KEY AUTO_INCREMENT,
+    fechahora DATETIME NOT NULL,
+    totalsteam DECIMAL(10, 2) NOT NULL,
+    totalgamerpay DECIMAL(10, 2) NOT NULL,
+    userid INTEGER NOT NULL,
+    registrotypeid INTEGER NOT NULL,
+    CONSTRAINT fk_userid_registros FOREIGN KEY (userid) REFERENCES users(userid),
+    CONSTRAINT fk_userid_registrotype FOREIGN KEY (registrotypeid) REFERENCES registrotType(registrotTypeid)
 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
--- Creación de la tabla ItemPrecio
-CREATE TABLE ItemPrecio(
-    ItemPrecioID BIGINT PRIMARY KEY AUTO_INCREMENT,
-    PrecioSteam DECIMAL(10, 2) NOT NULL,
-    PrecioGamerPay DECIMAL(10, 2) NOT NULL,
-    UserItemID BIGINT NOT NULL,
-    RegistroID BIGINT NOT NULL,
-    CONSTRAINT fk_UserItemID_ItemPrecio FOREIGN KEY (UserItemID) REFERENCES UserItems(UserItemID),
-    CONSTRAINT fk_RegistroID_ItemPrecio FOREIGN KEY (RegistroID) REFERENCES Registros(RegistroID)
+-- Creación de la tabla itemprecio
+CREATE TABLE itemprecio (
+    itemprecioid BIGINT PRIMARY KEY AUTO_INCREMENT,
+    preciosteam DECIMAL(10, 2) NOT NULL,
+    preciogamerpay DECIMAL(10, 2) NOT NULL,
+    useritemid BIGINT NOT NULL,
+    registroid BIGINT NOT NULL,
+    CONSTRAINT fk_useritemid_itemprecio FOREIGN KEY (useritemid) REFERENCES useritems(useritemid),
+    CONSTRAINT fk_registroid_itemprecio FOREIGN KEY (registroid) REFERENCES registros(registroid)
 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
-INSERT INTO RegistroType (Type) VALUES
+INSERT INTO registrotType (type) VALUES
     ('STEAM'),
     ('GAMERPAY'),
     ('ALL');
 
-USE SkinHolderLog;
+USE skinholderlog;
 
 DELIMITER $$
 
-CREATE PROCEDURE DeleteLogsAntiguos()
+CREATE PROCEDURE deletelogsantiguos()
 BEGIN
-    DELETE FROM Logger WHERE LogDateTime < DATE_SUB(CURDATE(), INTERVAL 6 MONTH);
+    DELETE FROM logger WHERE logdatetime < DATE_SUB(CURDATE(), INTERVAL 6 MONTH);
 END $$
 
 DELIMITER ;
