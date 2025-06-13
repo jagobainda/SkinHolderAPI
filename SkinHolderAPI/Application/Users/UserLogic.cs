@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using SkinHolderAPI.Application.Login;
+using SkinHolderAPI.Application.Shared;
 using SkinHolderAPI.DataService.Users;
 using SkinHolderAPI.DTOs.Login;
 using System.Security.Cryptography;
@@ -12,12 +13,10 @@ public interface IUserLogic
     Task<LoginResultDto?> LoginAsync(LoginDto loginDto);
 }
 
-public class UserLogic(IUserDataService userDataService, ITokenLogic tokenLogic, IConfiguration config, IMapper mapper) : IUserLogic
+public class UserLogic(IUserDataService userDataService, ITokenLogic tokenLogic, IConfiguration config, IMapper mapper) : BaseLogic(mapper, config), IUserLogic
 {
     private readonly IUserDataService _userDataService = userDataService;
     private readonly ITokenLogic _tokenLogic = tokenLogic;
-    private readonly IConfiguration _config = config;
-    private readonly IMapper _mapper = mapper;
 
     public async Task<LoginResultDto?> LoginAsync(LoginDto loginDto)
     {
