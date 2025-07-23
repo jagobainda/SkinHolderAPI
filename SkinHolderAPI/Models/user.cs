@@ -5,17 +5,17 @@ namespace SkinHolderAPI.Models;
 
 public partial class User
 {
-    public int UserId { get; set; }
+    public int Userid { get; set; }
 
     public string Username { get; set; } = null!;
 
-    public string PasswordHash { get; set; } = null!;
+    public string Passwordhash { get; set; } = null!;
 
-    public bool? IsActive { get; set; }
+    public bool? Isactive { get; set; }
 
-    public bool IsBanned { get; set; }
+    public bool Isbanned { get; set; }
 
-    public DateTime CreatedAt { get; set; }
+    public DateTime Createdat { get; set; }
 
     public virtual ICollection<Registro> Registros { get; set; } = new List<Registro>();
 

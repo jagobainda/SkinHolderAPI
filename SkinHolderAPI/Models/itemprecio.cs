@@ -5,17 +5,17 @@ namespace SkinHolderAPI.Models;
 
 public partial class Itemprecio
 {
-    public long ItemPrecioId { get; set; }
+    public long Itemprecioid { get; set; }
 
-    public decimal PrecioSteam { get; set; }
+    public decimal Preciosteam { get; set; }
 
-    public decimal PrecioGamerPay { get; set; }
+    public decimal Preciogamerpay { get; set; }
 
-    public long UserItemId { get; set; }
+    public long Useritemid { get; set; }
 
-    public long RegistroId { get; set; }
+    public long Registroid { get; set; }
 
     public virtual Registro Registro { get; set; } = null!;
 
-    public virtual Useritem UserItem { get; set; } = null!;
+    public virtual Useritem Useritem { get; set; } = null!;
 }

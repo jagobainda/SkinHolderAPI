@@ -20,7 +20,7 @@ public class TokenLogic(IMapper mapper, IConfiguration config) : BaseLogic(mappe
     {
         var claims = new[]
         {
-            new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
+            new Claim(ClaimTypes.NameIdentifier, user.Userid.ToString()),
             new Claim(ClaimTypes.Name, user.Username),
             new Claim(ClaimTypes.Role, "User")
         };

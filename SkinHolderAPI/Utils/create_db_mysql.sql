@@ -72,20 +72,14 @@ CREATE TABLE useritems (
     CONSTRAINT fk_userid_useritems FOREIGN KEY (userid) REFERENCES users(userid)
 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
-CREATE TABLE registrotype (
-    registrotypeid INTEGER PRIMARY KEY AUTO_INCREMENT,
-    type VARCHAR(8) NOT NULL
-) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
 CREATE TABLE registros (
     registroid BIGINT PRIMARY KEY AUTO_INCREMENT,
     fechahora DATETIME NOT NULL,
     totalsteam DECIMAL(10, 2) NOT NULL,
     totalgamerpay DECIMAL(10, 2) NOT NULL,
+    totalcsfloat DECIMAL(10, 2) NOT NULL,
     userid INTEGER NOT NULL,
-    registrotypeid INTEGER NOT NULL,
-    CONSTRAINT fk_userid_registros FOREIGN KEY (userid) REFERENCES users(userid),
-    CONSTRAINT fk_registrotypeid_registros FOREIGN KEY (registrotypeid) REFERENCES registrotype(registrotypeid)
+    CONSTRAINT fk_userid_registros FOREIGN KEY (userid) REFERENCES users(userid)
 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 CREATE TABLE itemprecio (
@@ -97,11 +91,6 @@ CREATE TABLE itemprecio (
     CONSTRAINT fk_useritemid_itemprecio FOREIGN KEY (useritemid) REFERENCES useritems(useritemid),
     CONSTRAINT fk_registroid_itemprecio FOREIGN KEY (registroid) REFERENCES registros(registroid)
 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
-INSERT INTO registrotype (type) VALUES
-    ('STEAM'),
-    ('GAMERPAY'),
-    ('ALL');
 
 USE SkinHolderLog;
 

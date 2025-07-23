@@ -24,7 +24,7 @@ public class UserLogic(IUserDataService userDataService, ITokenLogic tokenLogic,
 
         if (user == null) return null;
 
-        if (user.PasswordHash != ComputeSha512(loginDto.Password)) return null;
+        if (user.Passwordhash != ComputeSha512(loginDto.Password)) return null;
 
         var token = _tokenLogic.GenerateToken(user);
 

@@ -15,6 +15,6 @@ public class ItemsDataService(SkinHolderDbContext context) : IItemsDataService
 
     public async Task<List<Item>?> GetItemsAsync()
     {
-        return await _context.Items.ToListAsync();
+        return await _context.Items.OrderBy(i => i.Nombre).ToListAsync();
     }
 }

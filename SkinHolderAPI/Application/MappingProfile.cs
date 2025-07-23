@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using SkinHolderAPI.DTOs.Items;
 using SkinHolderAPI.DTOs.Login;
+using SkinHolderAPI.DTOs.Registros;
 using SkinHolderAPI.Models;
 
 namespace SkinHolderAPI.Application
@@ -12,8 +13,11 @@ namespace SkinHolderAPI.Application
             // Login
             CreateMap<User, LoginResultDto>();
 
-            //Items
+            // Items
             CreateMap<Item, ItemDto>();
+
+            // Registros
+            CreateMap<Registro, RegistroDto>();
         }
     }
 }

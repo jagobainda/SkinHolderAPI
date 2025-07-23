@@ -8,7 +8,7 @@ Scaffold-DbContext "server=localhost;port=3306;database=SkinHolderDB;user=root;p
 Scaffold-DbContext "server=localhost;port=3306;database=SkinHolderLog;user=root;password=root" Pomelo.EntityFrameworkCore.MySql -OutputDir Models/Logs -Context SkinHolderLogDbContext -ContextDir DataService/Contexts -Namespace SkinHolderAPI.Models.Logs -ContextNamespace SkinHolderAPI.DataService.Contexts -NoOnConfiguring -Force
 ```
 
-# Run MySQL service
+# Run local MySQL service
 ```PowerShell
 net start MySQL80
 ```

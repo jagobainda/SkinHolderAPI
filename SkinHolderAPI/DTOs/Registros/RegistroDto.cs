@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿namespace SkinHolderAPI.DTOs.Registros;
 
-namespace SkinHolderAPI.Models;
-
-public partial class Registro
+public class RegistroDto
 {
     public long Registroid { get; set; }
 
@@ -16,8 +13,4 @@ public partial class Registro
     public decimal Totalcsfloat { get; set; }
 
     public int Userid { get; set; }
-
-    public virtual ICollection<Itemprecio> Itemprecios { get; set; } = new List<Itemprecio>();
-
-    public virtual User User { get; set; } = null!;
 }
