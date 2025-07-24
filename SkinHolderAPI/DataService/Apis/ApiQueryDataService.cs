@@ -90,7 +90,7 @@ public class ApiQueryDataService(ILogLogic logLogic) : IApiQueryDataService
                 {
                     try
                     {
-                        var url = $"https://csfloat.com/api/v1/listings?limit=1&sort_by=lowest_price&market_hash_name={Uri.EscapeDataString(marketHashName)}";
+                        var url = $"https://csfloat.com/api/v1/listings?limit=1&sort_by=lowest_price&market_hash_name={marketHashName}";
                         var request = new HttpRequestMessage(HttpMethod.Get, url);
                         request.Headers.Add("Authorization", apiKeys[currentKeyIndex]);
 
