@@ -1,4 +1,6 @@
-﻿using SkinHolderAPI.DTOs.ApiQuery;
+﻿using SkinHolderAPI.Application.Log;
+using SkinHolderAPI.DTOs.ApiQuery;
+using SkinHolderAPI.Utils;
 using System.Text.Json;
 
 namespace SkinHolderAPI.DataService.Apis;
@@ -9,15 +11,17 @@ public interface IApiQueryDataService
     Task<List<CSFloatItemDto>> GetCSFloatItemPricesAsync(List<string> marketHashNames, string[] apiKeys);
 }
 
-public class ApiQueryDataService : IApiQueryDataService
+public class ApiQueryDataService(ILogLogic logLogic) : IApiQueryDataService
 {
+    private readonly ILogLogic _logLogic = logLogic;
+
     public async Task<List<GamerPayItemDto>> GetGamerPayItemPricesAsync(List<string> itemNames)
     {
         var items = await FetchGamerPayDataAsync();
         return [.. items.Where(i => itemNames.Contains(i.Name))];
     }
 
-    private static async Task<GamerPayItemDto[]> FetchGamerPayDataAsync()
+    private async Task<GamerPayItemDto[]> FetchGamerPayDataAsync()
     {
         try
         {
@@ -41,17 +45,17 @@ public class ApiQueryDataService : IApiQueryDataService
                 return [.. items];
             }
         }
-        catch (HttpRequestException)
+        catch (HttpRequestException ex)
         {
-            // TODO: Logging
+            await _logLogic.AddLogAsync(LogBuilder.BuildLoggerDto("HttpRequestException in method FetchGamerPayDataAsync(): " + ex.Message, LogType.Error, LogPlace.Api, 1));
         }
-        catch (JsonException)
+        catch (JsonException ex)
         {
-            // TODO: Logging
+            await _logLogic.AddLogAsync(LogBuilder.BuildLoggerDto("JsonException in method FetchGamerPayDataAsync(): " + ex.Message, LogType.Error, LogPlace.Api, 1));
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-            // TODO: Logging
+            await _logLogic.AddLogAsync(LogBuilder.BuildLoggerDto("Exception in method FetchGamerPayDataAsync(): " + ex.Message, LogType.Error, LogPlace.Api, 1));
         }
 
         return [];
@@ -62,7 +66,17 @@ public class ApiQueryDataService : IApiQueryDataService
         try
         {
             var usdToEur = await GetUsdToEur();
-            if (usdToEur == 0.0 || marketHashNames.Count == 0) return [];
+            if (usdToEur == 0.0)
+            {
+                await _logLogic.AddLogAsync(LogBuilder.BuildLoggerDto("GetUsdToEur returned 0.0", LogType.Warning, LogPlace.Api, 1));
+                return [];
+            }
+
+            if (marketHashNames.Count == 0)
+            {
+                await _logLogic.AddLogAsync(LogBuilder.BuildLoggerDto("No marketHashNames provided", LogType.Info, LogPlace.Api, 1));
+                return [];
+            }
 
             using var client = new HttpClient();
             List<CSFloatItemDto> items = [];
@@ -84,17 +98,25 @@ public class ApiQueryDataService : IApiQueryDataService
 
                         if ((int)response.StatusCode == 429)
                         {
+                            await _logLogic.AddLogAsync(LogBuilder.BuildLoggerDto($"Rate limit (429) with API key index {currentKeyIndex} for '{marketHashName}'", LogType.Info, LogPlace.Api, 1));
                             currentKeyIndex++;
                             continue;
                         }
 
-                        if (!response.IsSuccessStatusCode) return [];
+                        if (!response.IsSuccessStatusCode)
+                        {
+                            await _logLogic.AddLogAsync(LogBuilder.BuildLoggerDto($"Unsuccessful response ({(int)response.StatusCode}) for '{marketHashName}' with key index {currentKeyIndex}", LogType.Warning, LogPlace.Api, 1));
+                            return [];
+                        }
 
                         using var stream = await response.Content.ReadAsStreamAsync();
                         using var doc = await JsonDocument.ParseAsync(stream);
 
                         if (!doc.RootElement.TryGetProperty("data", out var dataElement) || dataElement.GetArrayLength() == 0)
+                        {
+                            await _logLogic.AddLogAsync(LogBuilder.BuildLoggerDto($"No data or invalid JSON for '{marketHashName}'", LogType.Warning, LogPlace.Api, 1));
                             return [];
+                        }
 
                         var listing = dataElement[0];
                         var marketName = listing.GetProperty("item").GetProperty("market_hash_name").GetString() ?? marketHashName;
@@ -108,23 +130,30 @@ public class ApiQueryDataService : IApiQueryDataService
 
                         break;
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
-                        // TODO: Logging
+                        await _logLogic.AddLogAsync(LogBuilder.BuildLoggerDto($"Exception with API key index {currentKeyIndex} for '{marketHashName}': {ex.Message}", LogType.Error, LogPlace.Api, 1));
                         currentKeyIndex++;
                     }
                 }
 
-                if (item == null) return [];
+                if (item == null)
+                {
+                    await _logLogic.AddLogAsync(LogBuilder.BuildLoggerDto($"All API keys failed or invalid data for '{marketHashName}'", LogType.Warning, LogPlace.Api, 1));
+                    return [];
+                }
 
                 items.Add(item);
             }
 
+            await _logLogic.AddLogAsync(LogBuilder.BuildLoggerDto($"GetCSFloatItemPricesAsync completed successfully. Retrieved {items.Count} items.", LogType.Info, LogPlace.Api, 1));
+
             return items;
         }
-        catch (HttpRequestException)
+        catch (HttpRequestException ex)
         {
-            // TODO: Logging
+            await _logLogic.AddLogAsync(LogBuilder.BuildLoggerDto("HttpRequestException in GetCSFloatItemPricesAsync: " + ex.Message, LogType.Error, LogPlace.Api, 1));
+
             return [];
         }
     }
