@@ -12,6 +12,7 @@ namespace SkinHolderAPI.Controllers;
 public class LogController(ILogLogic logLogic) : ControllerBase
 {
     private readonly ILogLogic _logLogic = logLogic;
+
     [HttpPost("AddLog")]
     [Limit(5)]
     public async Task<IActionResult> AddLog([FromBody] LoggerDto loggerDto)
