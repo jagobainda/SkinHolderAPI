@@ -4,11 +4,13 @@ using SkinHolderAPI.Application.Log;
 using SkinHolderAPI.Application.Login;
 using SkinHolderAPI.Application.Registros;
 using SkinHolderAPI.Application.Security;
+using SkinHolderAPI.Application.UserItems;
 using SkinHolderAPI.Application.Users;
 using SkinHolderAPI.DataService.Apis;
 using SkinHolderAPI.DataService.Items;
 using SkinHolderAPI.DataService.Log;
 using SkinHolderAPI.DataService.Registros;
+using SkinHolderAPI.DataService.UserItems;
 using SkinHolderAPI.DataService.Users;
 
 namespace SkinHolderAPI.Application;
@@ -22,6 +24,7 @@ public static class DependencyInjection
         services.AddScoped<IUserDataService, UserDataService>();
         services.AddScoped<IApiQueryDataService, ApiQueryDataService>();
         services.AddScoped<IItemsDataService, ItemsDataService>();
+        services.AddScoped<IUserItemsDataService, UserItemsDataService>();
         services.AddScoped<IRegistrosDataService, RegistrosDataService>();
 
         // BusinessLogics
@@ -31,6 +34,7 @@ public static class DependencyInjection
         services.AddScoped<IUserLogic, UserLogic>();
         services.AddScoped<IApiQueryLogic, ApiQueryLogic>();
         services.AddScoped<IItemsLogic, ItemsLogic>();
+        services.AddScoped<IUserItemsLogic, UserItemsLogic>();
         services.AddScoped<IRegistrosLogic, RegistrosLogic>();
 
         // Singletons

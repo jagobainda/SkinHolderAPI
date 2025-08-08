@@ -2,6 +2,7 @@
 using SkinHolderAPI.DTOs.Items;
 using SkinHolderAPI.DTOs.Login;
 using SkinHolderAPI.DTOs.Registros;
+using SkinHolderAPI.DTOs.UserItemsDto;
 using SkinHolderAPI.Models;
 
 namespace SkinHolderAPI.Application
@@ -15,6 +16,10 @@ namespace SkinHolderAPI.Application
 
             // Items
             CreateMap<Item, ItemDto>();
+
+            // UserItems
+            CreateMap<Useritem, UserItemDto>();
+            CreateMap<UserItemDto, Useritem>().ForMember(dest => dest.Preciomediocompra, opt => opt.MapFrom(src => 0.0));
 
             // Registros
             CreateMap<Registro, RegistroDto>();
