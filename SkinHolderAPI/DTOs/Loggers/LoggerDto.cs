@@ -1,6 +1,6 @@
 ﻿using SkinHolderAPI.Application.Log;
 
-namespace SkinHolderAPI.DTOs.Log;
+namespace SkinHolderAPI.DTOs.Loggers;
 
 public class LoggerDto
 {

@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SkinHolderAPI.Application.UserItems;
-using SkinHolderAPI.Application.Users;
 using SkinHolderAPI.Attributes;
 using System.Security.Claims;
 
@@ -13,7 +12,7 @@ namespace SkinHolderAPI.Controllers;
 public class UserItemsController(IUserItemsLogic userItemsLogic) : ControllerBase
 {
     public readonly IUserItemsLogic _userItemsLogic = userItemsLogic;
-    
+
     [HttpGet]
     [Limit(5)]
     public async Task<IActionResult> Get()
@@ -22,10 +21,7 @@ public class UserItemsController(IUserItemsLogic userItemsLogic) : ControllerBas
 
         var userItems = await _userItemsLogic.GetUserItemsAsync(userId);
 
-        if (userItems.Count == 0)
-        {
-            return NotFound("No user items found.");
-        }
+        if (userItems.Count == 0) return NotFound("No user items found."); 
 
         return Ok(userItems);
     }

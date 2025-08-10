@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SkinHolderAPI.Application.Log;
 using SkinHolderAPI.Attributes;
-using SkinHolderAPI.DTOs.Log;
+using SkinHolderAPI.DTOs.Loggers;
 
 namespace SkinHolderAPI.Controllers;
 

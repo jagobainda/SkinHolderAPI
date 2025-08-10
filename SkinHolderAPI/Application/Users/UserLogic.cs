@@ -31,7 +31,8 @@ public class UserLogic(IUserDataService userDataService, ITokenLogic tokenLogic,
         return new LoginResultDto
         {
             Token = token,
-            Username = user.Username
+            Username = user.Username,
+            UserId = user.Userid
         };
     }
 

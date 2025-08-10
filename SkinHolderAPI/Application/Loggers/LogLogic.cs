@@ -1,5 +1,5 @@
 ﻿using SkinHolderAPI.DataService.Log;
-using SkinHolderAPI.DTOs.Log;
+using SkinHolderAPI.DTOs.Loggers;
 using SkinHolderAPI.Models.Logs;
 
 namespace SkinHolderAPI.Application.Log;
