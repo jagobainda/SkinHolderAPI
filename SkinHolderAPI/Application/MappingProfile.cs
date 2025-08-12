@@ -5,24 +5,23 @@ using SkinHolderAPI.DTOs.Registros;
 using SkinHolderAPI.DTOs.UserItemsDto;
 using SkinHolderAPI.Models;
 
-namespace SkinHolderAPI.Application
+namespace SkinHolderAPI.Application;
+
+public class MappingProfile : Profile
 {
-    public class MappingProfile : Profile
+    public MappingProfile()
     {
-        public MappingProfile()
-        {
-            // Login
-            CreateMap<User, LoginResultDto>();
+        // Login
+        CreateMap<User, LoginResultDto>();
 
-            // Items
-            CreateMap<Item, ItemDto>();
+        // Items
+        CreateMap<Item, ItemDto>();
 
-            // UserItems
-            CreateMap<Useritem, UserItemDto>();
-            CreateMap<UserItemDto, Useritem>().ForMember(dest => dest.Preciomediocompra, opt => opt.MapFrom(src => 0.0));
+        // UserItems
+        CreateMap<Useritem, UserItemDto>().ForMember(dest => dest.ItemName, opt => opt.MapFrom(src => src.Item.Nombre));
+        CreateMap<UserItemDto, Useritem>().ForMember(dest => dest.Preciomediocompra, opt => opt.MapFrom(src => 0.0));
 
-            // Registros
-            CreateMap<Registro, RegistroDto>();
-        }
+        // Registros
+        CreateMap<Registro, RegistroDto>();
     }
 }
