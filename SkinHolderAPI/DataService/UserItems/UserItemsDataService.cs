@@ -15,6 +15,6 @@ public class UserItemsDataService(SkinHolderDbContext context) : IUserItemsDataS
 
     public async Task<List<Useritem>?> GetUserItemsAsync(int userId)
     {
-        return await _context.Useritems.Where(ui => ui.Userid == userId).ToListAsync();
+        return await _context.Useritems.Where(ui => ui.Userid == userId).Include(ui => ui.Item).ToListAsync();
     }
 }
