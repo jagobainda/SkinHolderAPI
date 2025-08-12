@@ -22,6 +22,8 @@ public class UserItemsLogic(IUserItemsDataService userItemsDataService, IMapper 
 
         var userItemsDto = _mapper.Map<List<UserItemDto>>(userItems);
 
+        userItemsDto.Sort((x, y) => string.Compare(x.ItemName, y.ItemName, StringComparison.OrdinalIgnoreCase));
+
         return userItemsDto;
     }
 }
