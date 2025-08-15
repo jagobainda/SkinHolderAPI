@@ -20,6 +20,6 @@ public class ItemsLogic(IItemsDataService itemsDataService, IMapper mapper, ICon
 
         if (items == null) return [];
 
-        return [.. items.Select(_mapper.Map<ItemDto>)];
+        return [.. items.Select(_mapper.Map<ItemDto>).OrderBy(i => i.Nombre)];
     }
 }

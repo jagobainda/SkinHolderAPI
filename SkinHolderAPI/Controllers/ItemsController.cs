@@ -13,7 +13,7 @@ public class ItemsController(IItemsLogic itemsLogic) : ControllerBase
     public readonly IItemsLogic _itemsLogic = itemsLogic;
 
     [HttpGet]
-    [Limit(5)]
+    [Limit(15)]
     public async Task<IActionResult> Get()
     {
         var items = await _itemsLogic.GetItemsAsync();

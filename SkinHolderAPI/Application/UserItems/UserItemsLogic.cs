@@ -8,6 +8,7 @@ namespace SkinHolderAPI.Application.UserItems;
 public interface IUserItemsLogic
 {
     Task<List<UserItemDto>> GetUserItemsAsync(int userId);
+    Task<bool> UpdateUserItemAsync(UserItemDto userItemDto);
 }
 
 public class UserItemsLogic(IUserItemsDataService userItemsDataService, IMapper mapper, IConfiguration config) : BaseLogic(mapper, config), IUserItemsLogic
@@ -25,5 +26,13 @@ public class UserItemsLogic(IUserItemsDataService userItemsDataService, IMapper 
         userItemsDto.Sort((x, y) => string.Compare(x.ItemName, y.ItemName, StringComparison.OrdinalIgnoreCase));
 
         return userItemsDto;
+    }
+
+    public async Task<bool> UpdateUserItemAsync(UserItemDto userItemDto)
+    {
+        return userItemDto.Cantidad > 0 ?
+            await _userItemsDataService.UpdateUserItemAsync(userItemDto.Userid, userItemDto.Cantidad) :
+            await _userItemsDataService.DeleteUserItemAsync(userItemDto.Userid);
+
     }
 }
