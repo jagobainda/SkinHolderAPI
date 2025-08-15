@@ -27,6 +27,21 @@ public class UserItemsController(IUserItemsLogic userItemsLogic) : ControllerBas
         return Ok(userItems);
     }
 
+    [HttpPost]
+    [Limit(10)]
+    public async Task<IActionResult> Create([FromBody] UserItemDto userItem)
+    {
+        var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+
+        if (userId != userItem.Userid) return BadRequest("User ID mismatch.");
+
+        if (userItem == null) return BadRequest("UserItem cannot be null");
+
+        var success = await _userItemsLogic.CreateUserItemAsync(userItem);
+        
+        return success ? Ok("User item created successfully.") : BadRequest("Failed to create user item.");
+    }
+
     [HttpPut]
     [Limit(40)]
     public async Task<IActionResult> Update([FromBody] UserItemDto userItems)

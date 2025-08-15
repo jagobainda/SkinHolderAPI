@@ -2,12 +2,14 @@
 using SkinHolderAPI.Application.Shared;
 using SkinHolderAPI.DataService.UserItems;
 using SkinHolderAPI.DTOs.UserItemsDto;
+using SkinHolderAPI.Models;
 
 namespace SkinHolderAPI.Application.UserItems;
 
 public interface IUserItemsLogic
 {
     Task<List<UserItemDto>> GetUserItemsAsync(int userId);
+    Task<bool> CreateUserItemAsync(UserItemDto userItemDto);
     Task<bool> UpdateUserItemAsync(UserItemDto userItemDto);
 }
 
@@ -26,6 +28,19 @@ public class UserItemsLogic(IUserItemsDataService userItemsDataService, IMapper 
         userItemsDto.Sort((x, y) => string.Compare(x.ItemName, y.ItemName, StringComparison.OrdinalIgnoreCase));
 
         return userItemsDto;
+    }
+
+    public async Task<bool> CreateUserItemAsync(UserItemDto userItemDto)
+    {
+        if (userItemDto == null || userItemDto.Cantidad <= 0) return false;
+
+        var userItem = _mapper.Map<Useritem>(userItemDto);
+
+        userItem.Useritemid = 0;
+
+        userItem.Preciomediocompra = 0;
+
+        return await _userItemsDataService.CreateUserItemAsync(userItem);
     }
 
     public async Task<bool> UpdateUserItemAsync(UserItemDto userItemDto)
