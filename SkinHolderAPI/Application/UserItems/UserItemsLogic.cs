@@ -31,8 +31,7 @@ public class UserItemsLogic(IUserItemsDataService userItemsDataService, IMapper 
     public async Task<bool> UpdateUserItemAsync(UserItemDto userItemDto)
     {
         return userItemDto.Cantidad > 0 ?
-            await _userItemsDataService.UpdateUserItemAsync(userItemDto.Userid, userItemDto.Cantidad) :
-            await _userItemsDataService.DeleteUserItemAsync(userItemDto.Userid);
-
+            await _userItemsDataService.UpdateUserItemAsync(userItemDto.Useritemid, userItemDto.Cantidad) :
+            await _userItemsDataService.DeleteUserItemAsync(userItemDto.Useritemid);
     }
 }

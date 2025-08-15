@@ -7,8 +7,8 @@ namespace SkinHolderAPI.DataService.UserItems;
 public interface IUserItemsDataService
 {
     Task<List<Useritem>?> GetUserItemsAsync(int userId);
-    Task<bool> UpdateUserItemAsync(int userId, int cantidad);
-    Task<bool> DeleteUserItemAsync(int userId);
+    Task<bool> UpdateUserItemAsync(long userItemId, int cantidad);
+    Task<bool> DeleteUserItemAsync(long userItemId);
 }
 
 public class UserItemsDataService(SkinHolderDbContext context) : IUserItemsDataService
@@ -20,7 +20,7 @@ public class UserItemsDataService(SkinHolderDbContext context) : IUserItemsDataS
         return await _context.Useritems.Where(ui => ui.Userid == userId).Include(ui => ui.Item).ToListAsync();
     }
 
-    public async Task<bool> UpdateUserItemAsync(int userItemId, int cantidad)
+    public async Task<bool> UpdateUserItemAsync(long userItemId, int cantidad)
     {
         var userItem = await _context.Useritems.FirstOrDefaultAsync(ui => ui.Useritemid == userItemId);
 
@@ -33,7 +33,7 @@ public class UserItemsDataService(SkinHolderDbContext context) : IUserItemsDataS
         return await _context.SaveChangesAsync() > 0;
     }
 
-    public async Task<bool> DeleteUserItemAsync(int userItemId)
+    public async Task<bool> DeleteUserItemAsync(long userItemId)
     {
         var userItem = await _context.Useritems.FirstOrDefaultAsync(ui => ui.Useritemid == userItemId);
 
