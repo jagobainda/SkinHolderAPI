@@ -48,6 +48,8 @@ public class UserItemsController(IUserItemsLogic userItemsLogic) : ControllerBas
     {
         var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
+        if (userId != userItems.Userid) return BadRequest("User ID mismatch.");
+
         if (userItems == null) return BadRequest("UserItem cannot be null");
 
         var success = await _userItemsLogic.UpdateUserItemAsync(userItems);

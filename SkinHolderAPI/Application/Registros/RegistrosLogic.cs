@@ -2,6 +2,7 @@
 using SkinHolderAPI.Application.Shared;
 using SkinHolderAPI.DataService.Registros;
 using SkinHolderAPI.DTOs.Registros;
+using SkinHolderAPI.Models;
 
 namespace SkinHolderAPI.Application.Registros;
 
@@ -10,6 +11,8 @@ public interface IRegistrosLogic
     Task<List<RegistroDto>> GetRegistrosAsync(int userId);
     Task<RegistroDto?> GetRegistroAsync(long registroId);
     Task<RegistroDto?> GetLastRegistroAsync(int userId);
+    Task<bool> CreateRegistroAsync(RegistroDto registroDto);
+    Task<bool> DeleteRegistroAsync(Registro registro);
 }
 
 public class RegistrosLogic(IRegistrosDataService registrosDataService, IMapper mapper, IConfiguration config) : BaseLogic(mapper, config), IRegistrosLogic
@@ -41,5 +44,19 @@ public class RegistrosLogic(IRegistrosDataService registrosDataService, IMapper 
         if (registro == null) return null;
 
         return _mapper.Map<RegistroDto>(registro);
+    }
+
+    public async Task<bool> CreateRegistroAsync(RegistroDto registroDto)
+    {
+        var registro = _mapper.Map<Registro>(registroDto);
+
+        registro.Fechahora = DateTime.Now;
+
+        return await _registrosDataService.CreateRegistroAsync(registro);
+    }
+
+    public async Task<bool> DeleteRegistroAsync(Registro registro)
+    {
+        return await _registrosDataService.DeleteRegistroAsync(registro);
     }
 }

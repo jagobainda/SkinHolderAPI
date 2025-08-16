@@ -22,6 +22,6 @@ public class MappingProfile : Profile
         CreateMap<UserItemDto, Useritem>().ForMember(dest => dest.Preciomediocompra, opt => opt.MapFrom(src => 0.0));
 
         // Registros
-        CreateMap<Registro, RegistroDto>();
+        CreateMap<Registro, RegistroDto>().ReverseMap();
     }
 }
