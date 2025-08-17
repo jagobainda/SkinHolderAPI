@@ -63,7 +63,7 @@ public class RegistrosController(IRegistrosLogic registrosLogic) : ControllerBas
 
         if (registro.Userid != userId) return Forbid("You do not have permission to delete this registro.");
 
-        var success = await _registrosLogic.DeleteRegistroAsync(registro);
+        var success = await _registrosLogic.DeleteRegistroAsync(registroId);
 
         return success ? Ok("Registro deleted successfully.") : BadRequest("Failed to delete registro.");
     }

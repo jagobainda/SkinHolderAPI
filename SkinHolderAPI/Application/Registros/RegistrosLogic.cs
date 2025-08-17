@@ -12,7 +12,7 @@ public interface IRegistrosLogic
     Task<RegistroDto?> GetRegistroAsync(long registroId);
     Task<RegistroDto?> GetLastRegistroAsync(int userId);
     Task<bool> CreateRegistroAsync(RegistroDto registroDto);
-    Task<bool> DeleteRegistroAsync(Registro registro);
+    Task<bool> DeleteRegistroAsync(long registroId);
 }
 
 public class RegistrosLogic(IRegistrosDataService registrosDataService, IMapper mapper, IConfiguration config) : BaseLogic(mapper, config), IRegistrosLogic
@@ -55,8 +55,12 @@ public class RegistrosLogic(IRegistrosDataService registrosDataService, IMapper 
         return await _registrosDataService.CreateRegistroAsync(registro);
     }
 
-    public async Task<bool> DeleteRegistroAsync(Registro registro)
+    public async Task<bool> DeleteRegistroAsync(long registroId)
     {
+        var registro = await _registrosDataService.GetRegistroAsync(registroId);
+
+        if (registro == null) return false;
+
         return await _registrosDataService.DeleteRegistroAsync(registro);
     }
 }
