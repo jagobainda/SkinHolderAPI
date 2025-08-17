@@ -6,18 +6,24 @@ using SkinHolderAPI.Utils;
 
 namespace SkinHolderAPI.DataService.UserItems;
 
-public interface IUserItemsDataService
-{
-    Task<List<Useritem>?> GetUserItemsAsync(int userId);
-    Task<bool> CreateUserItemAsync(Useritem userItem);
-    Task<bool> UpdateUserItemAsync(Useritem userItem, int cantidad);
-    Task<bool> DeleteUserItemAsync(Useritem userItem);
+public interface IUserItemsDataService 
+{ 
+    Task<List<Useritem>?> GetUserItemsAsync(int userId); 
+    Task<bool> CreateUserItemAsync(Useritem userItem); 
+    Task<bool> UpdateUserItemAsync(long userItemId, int cantidad); 
+    Task<bool> DeleteUserItemAsync(long userItemId); 
 }
 
-public class UserItemsDataService(SkinHolderDbContext context, ILogLogic logLogic) : IUserItemsDataService
+public class UserItemsDataService : IUserItemsDataService
 {
-    private readonly SkinHolderDbContext _context = context;
-    private readonly ILogLogic _logLogic = logLogic;
+    private readonly SkinHolderDbContext _context;
+    private readonly ILogLogic _logLogic;
+
+    public UserItemsDataService(SkinHolderDbContext context, ILogLogic logLogic)
+    {
+        _context = context;
+        _logLogic = logLogic;
+    }
 
     private async Task<T?> SafeExecuteAsync<T>(Func<Task<T>> action, string methodName, int userId = 0)
     {
@@ -43,9 +49,9 @@ public class UserItemsDataService(SkinHolderDbContext context, ILogLogic logLogi
     {
         return await SafeExecuteAsync(
             async () => await _context.Useritems
-                                     .Where(ui => ui.Userid == userId)
-                                     .Include(ui => ui.Item)
-                                     .ToListAsync(),
+                                      .Where(ui => ui.Userid == userId)
+                                      .Include(ui => ui.Item)
+                                      .ToListAsync(),
             nameof(GetUserItemsAsync),
             userId
         );
@@ -63,28 +69,33 @@ public class UserItemsDataService(SkinHolderDbContext context, ILogLogic logLogi
         }, nameof(CreateUserItemAsync), userItem.Userid);
     }
 
-    public async Task<bool> UpdateUserItemAsync(Useritem userItem, int cantidad)
+    public async Task<bool> UpdateUserItemAsync(long userItemId, int cantidad)
     {
-        if (userItem == null) return false;
-
         return await SafeExecuteAsync(async () =>
         {
+            var userItem = await _context.Useritems.FirstOrDefaultAsync(ui => ui.Useritemid == userItemId);
+
+            if (userItem == null) return false;
+
             userItem.Cantidad = cantidad;
             _context.Useritems.Update(userItem);
+
             await _context.SaveChangesAsync();
             return true;
-        }, nameof(UpdateUserItemAsync), userItem.Userid);
+        }, nameof(UpdateUserItemAsync));
     }
 
-    public async Task<bool> DeleteUserItemAsync(Useritem userItem)
+    public async Task<bool> DeleteUserItemAsync(long userItemId)
     {
-        if (userItem == null) return false;
-
         return await SafeExecuteAsync(async () =>
         {
+            var userItem = await _context.Useritems.FirstOrDefaultAsync(ui => ui.Useritemid == userItemId);
+
+            if (userItem == null) return false;
+
             _context.Useritems.Remove(userItem);
             await _context.SaveChangesAsync();
             return true;
-        }, nameof(DeleteUserItemAsync), userItem.Userid);
+        }, nameof(DeleteUserItemAsync));
     }
 }
