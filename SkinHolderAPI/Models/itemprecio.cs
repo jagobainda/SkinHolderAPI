@@ -15,6 +15,8 @@ public partial class Itemprecio
 
     public long Registroid { get; set; }
 
+    public decimal Preciocsfloat { get; set; }
+
     public virtual Registro Registro { get; set; } = null!;
 
     public virtual Useritem Useritem { get; set; } = null!;

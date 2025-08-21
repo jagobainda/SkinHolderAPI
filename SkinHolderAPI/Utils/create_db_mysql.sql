@@ -86,6 +86,7 @@ CREATE TABLE itemprecio (
     itemprecioid BIGINT PRIMARY KEY AUTO_INCREMENT,
     preciosteam DECIMAL(10, 2) NOT NULL,
     preciogamerpay DECIMAL(10, 2) NOT NULL,
+    preciocsfloat DECIMAL(10, 2) NOT NULL,
     useritemid BIGINT NOT NULL,
     registroid BIGINT NOT NULL,
     CONSTRAINT fk_useritemid_itemprecio FOREIGN KEY (useritemid) REFERENCES useritems(useritemid),

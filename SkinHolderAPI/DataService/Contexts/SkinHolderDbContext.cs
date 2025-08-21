@@ -57,6 +57,9 @@ public partial class SkinHolderDbContext : DbContext
             entity.HasIndex(e => e.Useritemid, "fk_useritemid_itemprecio");
 
             entity.Property(e => e.Itemprecioid).HasColumnName("itemprecioid");
+            entity.Property(e => e.Preciocsfloat)
+                .HasPrecision(10, 2)
+                .HasColumnName("preciocsfloat");
             entity.Property(e => e.Preciogamerpay)
                 .HasPrecision(10, 2)
                 .HasColumnName("preciogamerpay");
