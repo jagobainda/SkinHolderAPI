@@ -15,7 +15,7 @@ public class UserItemsController(IUserItemsLogic userItemsLogic) : ControllerBas
     public readonly IUserItemsLogic _userItemsLogic = userItemsLogic;
 
     [HttpGet]
-    [Limit(15)]
+    [Limit(30)]
     public async Task<IActionResult> Get()
     {
         var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
