@@ -18,7 +18,7 @@ public class RegistrosController(IRegistrosLogic registrosLogic) : ControllerBas
     [Limit(5)]
     public async Task<IActionResult> GetLastRegistro()
     {
-        var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+        var userId = GetUserId();
 
         var registro = await _registrosLogic.GetLastRegistroAsync(userId);
 
@@ -29,7 +29,7 @@ public class RegistrosController(IRegistrosLogic registrosLogic) : ControllerBas
     [Limit(5)]
     public async Task<IActionResult> Get()
     {
-        var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+        var userId = GetUserId();
 
         var registros = await _registrosLogic.GetRegistrosAsync(userId);
 
@@ -40,7 +40,9 @@ public class RegistrosController(IRegistrosLogic registrosLogic) : ControllerBas
     [Limit(5)]
     public async Task<IActionResult> Create([FromBody] RegistroDto registroDto)
     {
-        var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+        if (registroDto == null) return BadRequest("Registro cannot be null");
+
+        var userId = GetUserId();
 
         if (userId != registroDto.Userid) return BadRequest("User ID mismatch.");
 
@@ -55,7 +57,9 @@ public class RegistrosController(IRegistrosLogic registrosLogic) : ControllerBas
     [Limit(5)]
     public async Task<IActionResult> Delete(long registroId)
     {
-        var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+        if (registroId < 1) return BadRequest("Invalid registroId.");
+
+        var userId = GetUserId();
 
         var registro = await _registrosLogic.GetRegistroAsync(registroId);
 
@@ -67,4 +71,6 @@ public class RegistrosController(IRegistrosLogic registrosLogic) : ControllerBas
 
         return success ? Ok("Registro deleted successfully.") : BadRequest("Failed to delete registro.");
     }
+
+    private int GetUserId() => int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 }

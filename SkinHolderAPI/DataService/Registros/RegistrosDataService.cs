@@ -15,16 +15,10 @@ public interface IRegistrosDataService
     Task<bool> DeleteRegistroAsync(Registro registro);
 }
 
-public class RegistrosDataService : IRegistrosDataService
+public class RegistrosDataService(SkinHolderDbContext context, ILogLogic logLogic) : IRegistrosDataService
 {
-    private readonly SkinHolderDbContext _context;
-    private readonly ILogLogic _logLogic;
-
-    public RegistrosDataService(SkinHolderDbContext context, ILogLogic logLogic)
-    {
-        _context = context;
-        _logLogic = logLogic;
-    }
+    private readonly SkinHolderDbContext _context = context;
+    private readonly ILogLogic _logLogic = logLogic;
 
     private async Task<T?> SafeExecuteAsync<T>(Func<Task<T>> action, string methodName, int userId = 0)
     {

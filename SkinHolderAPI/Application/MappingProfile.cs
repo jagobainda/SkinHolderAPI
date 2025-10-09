@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using SkinHolderAPI.DTOs.ItemPrecio;
 using SkinHolderAPI.DTOs.Items;
 using SkinHolderAPI.DTOs.Login;
 using SkinHolderAPI.DTOs.Registros;
@@ -27,5 +28,8 @@ public class MappingProfile : Profile
 
         // Registros
         CreateMap<Registro, RegistroDto>().ReverseMap();
+
+        // ItemPrecio
+        CreateMap<Itemprecio, ItemPrecioDto>().ReverseMap();
     }
 }

@@ -1,4 +1,5 @@
 ﻿using SkinHolderAPI.Application.Apis;
+using SkinHolderAPI.Application.ItemPrecio;
 using SkinHolderAPI.Application.Items;
 using SkinHolderAPI.Application.Log;
 using SkinHolderAPI.Application.Login;
@@ -7,6 +8,7 @@ using SkinHolderAPI.Application.Security;
 using SkinHolderAPI.Application.UserItems;
 using SkinHolderAPI.Application.Users;
 using SkinHolderAPI.DataService.Apis;
+using SkinHolderAPI.DataService.ItemPrecio;
 using SkinHolderAPI.DataService.Items;
 using SkinHolderAPI.DataService.Log;
 using SkinHolderAPI.DataService.Registros;
@@ -26,6 +28,7 @@ public static class DependencyInjection
         services.AddScoped<IItemsDataService, ItemsDataService>();
         services.AddScoped<IUserItemsDataService, UserItemsDataService>();
         services.AddScoped<IRegistrosDataService, RegistrosDataService>();
+        services.AddScoped<IItemPrecioDataService, ItemPrecioDataService>();
 
         // BusinessLogics
         services.AddScoped<ILogLogic, LogLogic>();
@@ -36,6 +39,7 @@ public static class DependencyInjection
         services.AddScoped<IItemsLogic, ItemsLogic>();
         services.AddScoped<IUserItemsLogic, UserItemsLogic>();
         services.AddScoped<IRegistrosLogic, RegistrosLogic>();
+        services.AddScoped<IItemPrecioLogic, ItemPrecioLogic>();
 
         // Singletons
         services.AddSingleton<TokenLogic>();
