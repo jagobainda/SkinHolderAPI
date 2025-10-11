@@ -11,7 +11,7 @@ public interface IRegistrosDataService
     Task<List<Registro>?> GetRegistrosAsync(int userId);
     Task<Registro?> GetRegistroAsync(long registroId);
     Task<Registro?> GetLastRegistroAsync(int userId);
-    Task<bool> CreateRegistroAsync(Registro registro);
+    Task<long> CreateRegistroAsync(Registro registro);
     Task<bool> DeleteRegistroAsync(Registro registro);
 }
 
@@ -70,15 +70,15 @@ public class RegistrosDataService(SkinHolderDbContext context, ILogLogic logLogi
         );
     }
 
-    public async Task<bool> CreateRegistroAsync(Registro registro)
+    public async Task<long> CreateRegistroAsync(Registro registro)
     {
-        if (registro == null) return false;
+        if (registro == null) return 0;
 
         return await SafeExecuteAsync(async () =>
         {
             await _context.Registros.AddAsync(registro);
             await _context.SaveChangesAsync();
-            return true;
+            return registro.Registroid;
         }, nameof(CreateRegistroAsync), registro.Userid);
     }
 

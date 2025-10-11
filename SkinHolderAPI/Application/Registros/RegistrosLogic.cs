@@ -11,7 +11,7 @@ public interface IRegistrosLogic
     Task<List<RegistroDto>> GetRegistrosAsync(int userId);
     Task<RegistroDto?> GetRegistroAsync(long registroId);
     Task<RegistroDto?> GetLastRegistroAsync(int userId);
-    Task<bool> CreateRegistroAsync(RegistroDto registroDto);
+    Task<long> CreateRegistroAsync(RegistroDto registroDto);
     Task<bool> DeleteRegistroAsync(long registroId);
 }
 
@@ -46,7 +46,7 @@ public class RegistrosLogic(IRegistrosDataService registrosDataService, IMapper 
         return _mapper.Map<RegistroDto>(registro);
     }
 
-    public async Task<bool> CreateRegistroAsync(RegistroDto registroDto)
+    public async Task<long> CreateRegistroAsync(RegistroDto registroDto)
     {
         var registro = _mapper.Map<Registro>(registroDto);
 

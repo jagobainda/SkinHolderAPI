@@ -48,9 +48,9 @@ public class RegistrosController(IRegistrosLogic registrosLogic) : ControllerBas
 
         if (registroDto == null) return BadRequest("Registro cannot be null");
 
-        var success = await _registrosLogic.CreateRegistroAsync(registroDto);
+        var registroId = await _registrosLogic.CreateRegistroAsync(registroDto);
 
-        return success ? Ok("Registro created successfully.") : BadRequest("Failed to create registro.");
+        return registroId != 0 ? Ok(registroId) : BadRequest("Failed to create registro.");
     }
 
     [HttpDelete]

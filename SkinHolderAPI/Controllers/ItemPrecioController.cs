@@ -4,7 +4,6 @@ using SkinHolderAPI.Application.ItemPrecio;
 using SkinHolderAPI.Application.Registros;
 using SkinHolderAPI.Attributes;
 using SkinHolderAPI.DTOs.ItemPrecio;
-using SkinHolderAPI.Models;
 using System.Security.Claims;
 
 namespace SkinHolderAPI.Controllers;
@@ -49,9 +48,9 @@ public class ItemPrecioController(IItemPrecioLogic itemPrecioLogic, IRegistrosLo
         var userId = GetUserId();
 
         var registro = await _registrosLogic.GetRegistroAsync(firstRegistroId);
-        
+
         if (registro == null) return BadRequest("Registro not found.");
-        
+
         if (registro.Userid != userId) return Unauthorized("Unauthorized registro.");
 
         var success = await _itemPrecioLogic.CreateItemPreciosAsync(itemPreciosDto);
