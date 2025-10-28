@@ -16,6 +16,8 @@ public class ExternalController(IExternalLogic externalLogic) : ControllerBase
     [Limit(30)]
     public async Task<IActionResult> GetPlayerInfo([FromBody] string playerId)
     {
+        if (playerId.Length > 25) return BadRequest("Wrong id format");
+
         var result =  await _externalLogic.GetPlayerInfo(playerId);
 
         if (string.IsNullOrEmpty(result)) return Forbid();
