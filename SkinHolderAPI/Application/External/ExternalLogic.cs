@@ -15,8 +15,24 @@ public class ExternalLogic(IConfiguration config, ILogLogic logLogic) : IExterna
 
     public async Task<string> GetPlayerInfo(string playerId)
     {
-        _ = Task.Run(async () => await _logLogic.AddLogAsync(LogBuilder.BuildLoggerDto($"External call on GetPlayerInfo", LogType.Info, LogPlace.Api, 1)));
+        _ = Task.Run(async () => await _logLogic.AddLogAsync(LogBuilder.BuildLoggerDto($"External call on GetPlayerInfo for player: {playerId}", LogType.Info, LogPlace.Api, 1)));
 
-        return "Player Info";
+        try
+        {
+            using var httpClient = new HttpClient();
+            httpClient.Timeout = TimeSpan.FromSeconds(30);
+            
+            var response = await httpClient.GetAsync($"https://cswatch.in/api/players/{playerId}");
+            
+            if (!response.IsSuccessStatusCode) return string.Empty;
+            
+            var jsonResponse = await response.Content.ReadAsStringAsync();
+            return jsonResponse;
+        }
+        catch (Exception ex)
+        {
+            _ = Task.Run(async () => await _logLogic.AddLogAsync(LogBuilder.BuildLoggerDto($"Error calling external API for player {playerId}: {ex.Message}", LogType.Error, LogPlace.Api, 1)));
+            return string.Empty;
+        }
     }
 }

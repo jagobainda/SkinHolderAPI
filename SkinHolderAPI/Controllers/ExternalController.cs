@@ -14,7 +14,10 @@ public class ExternalController(IExternalLogic externalLogic) : ControllerBase
     [HttpPost("GetPlayerInfo")]
     public async Task<IActionResult> GetPlayerInfo([FromBody] string playerId)
     {
-        return Ok(playerId);
-        //return Ok(await _externalLogic.GetPlayerInfo(playerId));
+        var result =  await _externalLogic.GetPlayerInfo(playerId);
+
+        if (string.IsNullOrEmpty(result)) return Forbid();
+        
+        return Ok(result);
     }
 }
