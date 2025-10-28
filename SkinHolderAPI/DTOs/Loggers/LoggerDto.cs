@@ -1,4 +1,4 @@
-﻿using SkinHolderAPI.Application.Log;
+﻿using SkinHolderAPI.Application.Loggers;
 
 namespace SkinHolderAPI.DTOs.Loggers;
 

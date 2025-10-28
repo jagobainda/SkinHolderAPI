@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SkinHolderAPI.Application.Log;
+using SkinHolderAPI.Application.Loggers;
 using SkinHolderAPI.DataService.Contexts;
 using SkinHolderAPI.Models;
 using SkinHolderAPI.Utils;

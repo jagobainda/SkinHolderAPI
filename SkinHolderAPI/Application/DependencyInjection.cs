@@ -1,7 +1,8 @@
 ﻿using SkinHolderAPI.Application.Apis;
+using SkinHolderAPI.Application.External;
 using SkinHolderAPI.Application.ItemPrecio;
 using SkinHolderAPI.Application.Items;
-using SkinHolderAPI.Application.Log;
+using SkinHolderAPI.Application.Loggers;
 using SkinHolderAPI.Application.Login;
 using SkinHolderAPI.Application.Registros;
 using SkinHolderAPI.Application.Security;
@@ -40,6 +41,8 @@ public static class DependencyInjection
         services.AddScoped<IUserItemsLogic, UserItemsLogic>();
         services.AddScoped<IRegistrosLogic, RegistrosLogic>();
         services.AddScoped<IItemPrecioLogic, ItemPrecioLogic>();
+
+        services.AddScoped<IExternalLogic, ExternalLogic>();
 
         // Singletons
         services.AddSingleton<TokenLogic>();

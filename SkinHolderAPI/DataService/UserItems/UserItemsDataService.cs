@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SkinHolderAPI.Application.Log;
+using SkinHolderAPI.Application.Loggers;
 using SkinHolderAPI.DataService.Contexts;
 using SkinHolderAPI.Models;
 using SkinHolderAPI.Utils;
@@ -14,16 +14,10 @@ public interface IUserItemsDataService
     Task<bool> DeleteUserItemAsync(long userItemId); 
 }
 
-public class UserItemsDataService : IUserItemsDataService
+public class UserItemsDataService(SkinHolderDbContext context, ILogLogic logLogic) : IUserItemsDataService
 {
-    private readonly SkinHolderDbContext _context;
-    private readonly ILogLogic _logLogic;
-
-    public UserItemsDataService(SkinHolderDbContext context, ILogLogic logLogic)
-    {
-        _context = context;
-        _logLogic = logLogic;
-    }
+    private readonly SkinHolderDbContext _context = context;
+    private readonly ILogLogic _logLogic = logLogic;
 
     private async Task<T?> SafeExecuteAsync<T>(Func<Task<T>> action, string methodName, int userId = 0)
     {

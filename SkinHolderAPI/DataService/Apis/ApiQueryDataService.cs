@@ -1,4 +1,4 @@
-﻿using SkinHolderAPI.Application.Log;
+﻿using SkinHolderAPI.Application.Loggers;
 using SkinHolderAPI.DTOs.ApiQuery;
 using SkinHolderAPI.Utils;
 using System.Text.Json;

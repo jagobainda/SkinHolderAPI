@@ -2,7 +2,7 @@
 using SkinHolderAPI.DTOs.Loggers;
 using SkinHolderAPI.Models.Logs;
 
-namespace SkinHolderAPI.Application.Log;
+namespace SkinHolderAPI.Application.Loggers;
 
 public interface ILogLogic
 {

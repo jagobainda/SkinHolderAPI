@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using SkinHolderAPI.Application.Log;
+using SkinHolderAPI.Application.Loggers;
 using SkinHolderAPI.Attributes;
 using SkinHolderAPI.DTOs.Loggers;
 
