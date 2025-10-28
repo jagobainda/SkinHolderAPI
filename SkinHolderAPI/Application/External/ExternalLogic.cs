@@ -15,7 +15,7 @@ public class ExternalLogic(IConfiguration config, ILogLogic logLogic) : IExterna
 
     public async Task<string> GetPlayerInfo(string playerId)
     {
-        _ = Task.Run(async () => await _logLogic.AddLogAsync(LogBuilder.BuildLoggerDto($"External call on GetPlayerInfo for player: {playerId}", LogType.Info, LogPlace.Api, 1)));
+        await _logLogic.AddLogAsync(LogBuilder.BuildLoggerDto($"External call on GetPlayerInfo for player: {playerId}", LogType.Info, LogPlace.Api, 1));
 
         try
         {
@@ -31,7 +31,7 @@ public class ExternalLogic(IConfiguration config, ILogLogic logLogic) : IExterna
         }
         catch (Exception ex)
         {
-            _ = Task.Run(async () => await _logLogic.AddLogAsync(LogBuilder.BuildLoggerDto($"Error calling external API for player {playerId}: {ex.Message}", LogType.Error, LogPlace.Api, 1)));
+            await _logLogic.AddLogAsync(LogBuilder.BuildLoggerDto($"Error calling external API for player {playerId}: {ex.Message}", LogType.Error, LogPlace.Api, 1));
             return string.Empty;
         }
     }
