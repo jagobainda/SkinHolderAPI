@@ -9,6 +9,7 @@ using SkinHolderAPI.Application.Security;
 using SkinHolderAPI.Application.UserItems;
 using SkinHolderAPI.Application.Users;
 using SkinHolderAPI.DataService.Apis;
+using SkinHolderAPI.DataService.External;
 using SkinHolderAPI.DataService.ItemPrecio;
 using SkinHolderAPI.DataService.Items;
 using SkinHolderAPI.DataService.Log;
@@ -30,6 +31,8 @@ public static class DependencyInjection
         services.AddScoped<IUserItemsDataService, UserItemsDataService>();
         services.AddScoped<IRegistrosDataService, RegistrosDataService>();
         services.AddScoped<IItemPrecioDataService, ItemPrecioDataService>();
+
+        services.AddScoped<IExternalDataService, ExternalDataService>();
 
         // BusinessLogics
         services.AddScoped<ILogLogic, LogLogic>();

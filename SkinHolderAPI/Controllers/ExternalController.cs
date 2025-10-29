@@ -18,10 +18,21 @@ public class ExternalController(IExternalLogic externalLogic) : ControllerBase
     {
         if (playerId.Length > 25) return BadRequest("Wrong id format");
 
-        var result =  await _externalLogic.GetPlayerInfo(playerId);
+        var result =  await _externalLogic.GetPlayerInfoAsync(playerId);
 
         if (string.IsNullOrEmpty(result)) return Forbid();
         
         return Ok(result);
+    }
+
+    [HttpGet("GetExtensionUsage")]
+    [Limit(3)]
+    public async Task<IActionResult> GetExtensionUsage()
+    {
+        var usage = await _externalLogic.GetExtensionUsageAsync();
+
+        if (usage == null) return NotFound("No data available");
+
+        return Ok(usage);
     }
 }

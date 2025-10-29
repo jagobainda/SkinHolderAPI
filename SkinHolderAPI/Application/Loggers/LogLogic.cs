@@ -7,6 +7,7 @@ namespace SkinHolderAPI.Application.Loggers;
 public interface ILogLogic
 {
     Task<bool> AddLogAsync(LoggerDto logger);
+    Task<bool> DeleteOldLogsAsync(DateTime cutoffDate);
 }
 
 public class LogLogic(ILogDataService logDataService) : ILogLogic
@@ -28,6 +29,11 @@ public class LogLogic(ILogDataService logDataService) : ILogLogic
         };
 
          return await _logDataService.AddLogAsync(logger);
+    }
+
+    public async Task<bool> DeleteOldLogsAsync(DateTime cutoffDate)
+    {
+        return await _logDataService.DeleteOldLogsAsync(cutoffDate);
     }
 }
 
