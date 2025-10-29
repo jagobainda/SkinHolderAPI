@@ -26,7 +26,7 @@ public class ExternalController(IExternalLogic externalLogic) : ControllerBase
     }
 
     [HttpGet("GetExtensionUsage")]
-    [Limit(3)]
+    [Limit(5)]
     public async Task<IActionResult> GetExtensionUsage()
     {
         var usage = await _externalLogic.GetExtensionUsageAsync();
