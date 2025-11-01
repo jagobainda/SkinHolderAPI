@@ -16,7 +16,7 @@ public class AuthController(IUserLogic userLogic) : ControllerBase
 
 
     [HttpPost("login")]
-    [Limit(5)]
+    [Limit(15)]
     [AllowAnonymous]
     public async Task<IActionResult> Login([FromBody] LoginDto dto)
     {
@@ -28,6 +28,7 @@ public class AuthController(IUserLogic userLogic) : ControllerBase
     }
 
     [HttpGet("validate")]
+    [Limit(20)]
     [Authorize]
     public IActionResult ValidateToken()
     {
@@ -37,5 +38,14 @@ public class AuthController(IUserLogic userLogic) : ControllerBase
             userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value,
             username = User.FindFirst(ClaimTypes.Name)?.Value
         });
+    }
+
+    [HttpPost("requestAccess")]
+    [Limit(1)]
+    [AllowAnonymous]
+    public IActionResult RequestAccess([FromBody] string email)
+    {
+        // TODO: Implement access request logic
+        return Ok();
     }
 }
