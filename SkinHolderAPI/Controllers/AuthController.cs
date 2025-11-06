@@ -29,7 +29,6 @@ public class AuthController(IUserLogic userLogic) : ControllerBase
 
     [HttpGet("validate")]
     [Limit(20)]
-    [Authorize]
     public IActionResult ValidateToken()
     {
         return Ok(new

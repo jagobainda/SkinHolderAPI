@@ -14,7 +14,6 @@ public class Program
         var builder = WebApplication.CreateBuilder(args);
 
         builder.Services.AddControllersWithViews();
-
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
 
@@ -29,6 +28,17 @@ public class Program
                 new MySqlServerVersion(new Version(8, 0, 42))));
 
         builder.Services.AddApplicationServices();
+
+        builder.Services.AddCors(options =>
+        {
+            options.AddDefaultPolicy(policy =>
+            {
+                policy.WithOrigins("https://skinholder.jagoba.dev")
+                      .AllowAnyMethod()
+                      .AllowAnyHeader()
+                      .AllowCredentials();
+            });
+        });
 
         var jwtConfig = builder.Configuration.GetSection("Jwt");
         var key = Encoding.UTF8.GetBytes(jwtConfig["Key"]!);
@@ -66,6 +76,7 @@ public class Program
 
         app.UseHttpsRedirection();
 
+        app.UseCors();
         app.UseAuthentication();
         app.UseAuthorization();
 
