@@ -22,6 +22,8 @@ public class RegistrosController(IRegistrosLogic registrosLogic) : ControllerBas
 
         var registro = await _registrosLogic.GetLastRegistroAsync(userId);
 
+        if (registro == null) return BadRequest();
+
         return Ok(registro);
     }
 
@@ -32,6 +34,8 @@ public class RegistrosController(IRegistrosLogic registrosLogic) : ControllerBas
         var userId = GetUserId();
 
         var registros = await _registrosLogic.GetRegistrosAsync(userId);
+
+        if (registros.Count == 0) return NoContent();
 
         return Ok(registros);
     }
@@ -70,6 +74,19 @@ public class RegistrosController(IRegistrosLogic registrosLogic) : ControllerBas
         var success = await _registrosLogic.DeleteRegistroAsync(registroId);
 
         return success ? Ok("Registro deleted successfully.") : BadRequest("Failed to delete registro.");
+    }
+
+    [HttpGet("GetVarianceStats")]
+    [Limit(10)]
+    public async Task<IActionResult> GetVarianceStats()
+    {
+        var userId = GetUserId();
+
+        var stats = await _registrosLogic.GetVarianceStatsAsync(userId);
+
+        if (stats == null) return BadRequest();
+
+        return Ok(stats);
     }
 
     private int GetUserId() => int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
