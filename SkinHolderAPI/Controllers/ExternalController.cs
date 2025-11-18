@@ -35,4 +35,13 @@ public class ExternalController(IExternalLogic externalLogic) : ControllerBase
 
         return Ok(usage);
     }
+
+    [HttpGet]
+    [Limit(5)]
+    public async Task<IActionResult> GetGamerPayPrices()
+    {
+        var status = await _externalLogic.GetGamerPayPricesAsync();
+
+        return Ok(status);
+    }
 }

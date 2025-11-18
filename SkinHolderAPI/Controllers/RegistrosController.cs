@@ -15,7 +15,7 @@ public class RegistrosController(IRegistrosLogic registrosLogic) : ControllerBas
     private readonly IRegistrosLogic _registrosLogic = registrosLogic;
 
     [HttpGet("GetLastRegistro")]
-    [Limit(5)]
+    [Limit(10)]
     public async Task<IActionResult> GetLastRegistro()
     {
         var userId = GetUserId();

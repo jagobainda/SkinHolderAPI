@@ -9,6 +9,7 @@ public interface IExternalLogic
 {
     Task<string> GetPlayerInfoAsync(string playerId);
     Task<ExtensionUsageDto?> GetExtensionUsageAsync();
+    Task<string> GetGamerPayPricesAsync();
 }
 
 public class ExternalLogic(IConfiguration config, ILogLogic logLogic, IExternalDataService externalDataService) : IExternalLogic
@@ -30,8 +31,7 @@ public class ExternalLogic(IConfiguration config, ILogLogic logLogic, IExternalD
             
             if (!response.IsSuccessStatusCode) return string.Empty;
             
-            var jsonResponse = await response.Content.ReadAsStringAsync();
-            return jsonResponse;
+            return await response.Content.ReadAsStringAsync();
         }
         catch (Exception ex)
         {
@@ -85,5 +85,24 @@ public class ExternalLogic(IConfiguration config, ILogLogic logLogic, IExternalD
         };
 
         return extensionUsageDto;
+    }
+
+    public async Task<string> GetGamerPayPricesAsync()
+    {
+        try
+        {
+            using var httpClient = new HttpClient();
+            httpClient.Timeout = TimeSpan.FromSeconds(30);
+
+            var response = await httpClient.GetAsync($"https://api.gamerpay.gg/prices");
+
+            if (!response.IsSuccessStatusCode) return string.Empty;
+
+            return await response.Content.ReadAsStringAsync();
+        }
+        catch
+        {
+            return string.Empty;
+        }
     }
 }
