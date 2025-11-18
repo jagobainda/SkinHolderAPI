@@ -7,13 +7,13 @@ namespace SkinHolderAPI.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-[AllowAnonymous]
 public class ExternalController(IExternalLogic externalLogic) : ControllerBase
 {
     private readonly IExternalLogic _externalLogic = externalLogic;
 
     [HttpPost("GetPlayerInfo")]
     [Limit(30)]
+    [AllowAnonymous]
     public async Task<IActionResult> GetPlayerInfo([FromBody] string playerId)
     {
         if (playerId.Length > 25) return BadRequest("Wrong id format");
@@ -27,6 +27,7 @@ public class ExternalController(IExternalLogic externalLogic) : ControllerBase
 
     [HttpGet("GetExtensionUsage")]
     [Limit(5)]
+    [AllowAnonymous]
     public async Task<IActionResult> GetExtensionUsage()
     {
         var usage = await _externalLogic.GetExtensionUsageAsync();
@@ -38,10 +39,9 @@ public class ExternalController(IExternalLogic externalLogic) : ControllerBase
 
     [HttpGet("GetGamerPayPrices")]
     [Limit(5)]
+    [Authorize]
     public async Task<IActionResult> GetGamerPayPrices()
     {
-        var status = await _externalLogic.GetGamerPayPricesAsync();
-
-        return Ok(status);
+        return Ok(await _externalLogic.GetGamerPayPricesAsync());
     }
 }
