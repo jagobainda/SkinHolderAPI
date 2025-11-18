@@ -98,7 +98,19 @@ public class ExternalLogic(IConfiguration config, ILogLogic logLogic, IExternalD
 
             if (!response.IsSuccessStatusCode) return string.Empty;
 
-            return await response.Content.ReadAsStringAsync();
+            var jsonString = await response.Content.ReadAsStringAsync();
+            
+            var fullData = System.Text.Json.JsonSerializer.Deserialize<System.Text.Json.JsonElement>(jsonString);
+            
+            var filteredData = fullData.EnumerateArray()
+                .Select(item => new
+                {
+                    item = item.GetProperty("item").GetString(),
+                    price = item.GetProperty("price").GetDecimal()
+                })
+                .ToList();
+            
+            return System.Text.Json.JsonSerializer.Serialize(filteredData);
         }
         catch
         {
