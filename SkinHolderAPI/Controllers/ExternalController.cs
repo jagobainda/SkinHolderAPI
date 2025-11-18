@@ -36,7 +36,7 @@ public class ExternalController(IExternalLogic externalLogic) : ControllerBase
         return Ok(usage);
     }
 
-    [HttpGet]
+    [HttpGet("GetGamerPayPrices")]
     [Limit(5)]
     public async Task<IActionResult> GetGamerPayPrices()
     {
