@@ -42,6 +42,22 @@ public class ExternalController(IExternalLogic externalLogic) : ControllerBase
     [Authorize]
     public async Task<IActionResult> GetGamerPayPrices()
     {
-        return Ok(await _externalLogic.GetGamerPayPricesAsync());
+        var result = await _externalLogic.GetGamerPayPricesAsync();
+
+        if (string.IsNullOrEmpty(result)) return NoContent();
+
+        return Ok(result);
+    }
+
+    [HttpPost("GetSteamPrice")]
+    [Limit(30)]
+    [Authorize]
+    public async Task<IActionResult> GetSteamPrice([FromBody] string steamHashName)
+    {
+        var result = await _externalLogic.GetSteamPriceAsync(steamHashName);
+
+        if (string.IsNullOrEmpty(result)) return NoContent();
+        
+        return Ok(result);
     }
 }

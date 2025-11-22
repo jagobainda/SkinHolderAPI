@@ -10,6 +10,7 @@ public interface IExternalLogic
     Task<string> GetPlayerInfoAsync(string playerId);
     Task<ExtensionUsageDto?> GetExtensionUsageAsync();
     Task<string> GetGamerPayPricesAsync();
+    Task<string> GetSteamPriceAsync(string marketHashName, string country = "ES", int currency = 3, int appId = 730);
 }
 
 public class ExternalLogic(IConfiguration config, ILogLogic logLogic, IExternalDataService externalDataService) : IExternalLogic
@@ -17,6 +18,8 @@ public class ExternalLogic(IConfiguration config, ILogLogic logLogic, IExternalD
     public readonly IConfiguration _config = config;
     public readonly ILogLogic _logLogic = logLogic;
     public readonly IExternalDataService _externalDataService = externalDataService;
+    private const int SteamMaxRetryAttempts = 5;
+    private const string SteamBaseUrl = "https://steamcommunity.com/market/priceoverview/?country={0}&currency={1}&appid={2}&market_hash_name={3}";
 
     public async Task<string> GetPlayerInfoAsync(string playerId)
     {
@@ -103,11 +106,7 @@ public class ExternalLogic(IConfiguration config, ILogLogic logLogic, IExternalD
             var fullData = System.Text.Json.JsonSerializer.Deserialize<System.Text.Json.JsonElement>(jsonString);
             
             var filteredData = fullData.EnumerateArray()
-                .Select(item => new
-                {
-                    item = item.GetProperty("item").GetString(),
-                    price = item.GetProperty("price").GetDecimal()
-                })
+                .Select(item => new { item = item.GetProperty("item").GetString(), price = item.GetProperty("price").GetDecimal() })
                 .ToList();
             
             return System.Text.Json.JsonSerializer.Serialize(filteredData);
@@ -116,5 +115,34 @@ public class ExternalLogic(IConfiguration config, ILogLogic logLogic, IExternalD
         {
             return string.Empty;
         }
+    }
+
+    public async Task<string> GetSteamPriceAsync(string marketHashName, string country = "ES", int currency = 3, int appId = 730)
+    {
+        var url = string.Format(SteamBaseUrl, country, currency, appId, marketHashName);
+        var attempts = 0;
+
+        using var Client = new HttpClient();
+        while (attempts <= SteamMaxRetryAttempts)
+        {
+            try
+            {
+                var response = await Client.GetAsync(url);
+                if (response.IsSuccessStatusCode)
+                {
+                    var responseContent = await response.Content.ReadAsStringAsync();
+
+                    return responseContent;
+                }
+            }
+            catch
+            {
+                return string.Empty;
+            }
+
+            attempts++;
+        }
+
+        return string.Empty;
     }
 }
