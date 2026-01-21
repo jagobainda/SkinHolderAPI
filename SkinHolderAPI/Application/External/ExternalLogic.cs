@@ -8,10 +8,10 @@ namespace SkinHolderAPI.Application.External;
 public interface IExternalLogic
 {
     Task<string> GetPlayerInfoAsync(string playerId);
-    Task<ExtensionUsageDto?> GetExtensionUsageAsync();
     Task<(string, string)> GetFaceitPlayerDataAsync(string steamId);
     Task<string> GetFaceitPlayerStatsAsync(string playerId, string game);
     Task<string> GetFaceitBansAsync(string playerId);
+    Task<ExtensionUsageDto?> GetExtensionUsageAsync();
     Task<string> GetGamerPayPricesAsync();
     Task<string> GetSteamPriceAsync(string marketHashName, string country = "ES", int currency = 3, int appId = 730);
 }
@@ -126,7 +126,7 @@ public class ExternalLogic(IConfiguration config, ILogLogic logLogic, IConfigura
 
     public async Task<ExtensionUsageDto?> GetExtensionUsageAsync()
     {
-        _ = _logLogic.DeleteOldLogsAsync(DateTime.UtcNow.AddMonths(-4));
+        //_ = _logLogic.DeleteOldLogsAsync(DateTime.UtcNow.AddMonths(-4));
 
         var logs = await _externalDataService.GetExtensionUsageAsync();
 

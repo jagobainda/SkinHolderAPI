@@ -1,4 +1,5 @@
 ﻿using SkinHolderAPI.Application.Apis;
+using SkinHolderAPI.Application.Background;
 using SkinHolderAPI.Application.External;
 using SkinHolderAPI.Application.ItemPrecio;
 using SkinHolderAPI.Application.Items;
@@ -49,6 +50,9 @@ public static class DependencyInjection
 
         // Singletons
         services.AddSingleton<TokenLogic>();
+
+        // Background Services
+        services.AddHostedService<LogCleanupService>();
 
         // Mapper
         services.AddAutoMapper(typeof(MappingProfile));
