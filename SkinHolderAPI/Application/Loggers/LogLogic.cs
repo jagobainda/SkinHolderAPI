@@ -22,7 +22,7 @@ public class LogLogic(ILogDataService logDataService) : ILogLogic
         {
             LoggerId = 0,
             LogDescription = loggerDto.LogDescription,
-            LogDateTime = DateTime.UtcNow,
+            LogDateTime = DateTime.Now,
             LogTypeId = loggerDto.LogTypeId.GetHashCode(),
             LogPlaceId = loggerDto.LogPlaceId.GetHashCode(),
             UserId = loggerDto.UserId

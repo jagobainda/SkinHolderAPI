@@ -126,8 +126,6 @@ public class ExternalLogic(IConfiguration config, ILogLogic logLogic, IConfigura
 
     public async Task<ExtensionUsageDto?> GetExtensionUsageAsync()
     {
-        //_ = _logLogic.DeleteOldLogsAsync(DateTime.UtcNow.AddMonths(-4));
-
         var logs = await _externalDataService.GetExtensionUsageAsync();
 
         if (logs == null || logs.Count == 0) return null;
