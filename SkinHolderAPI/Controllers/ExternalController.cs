@@ -84,7 +84,7 @@ public class ExternalController(ISteamPriceQueueService steamPriceQueueService, 
 
     [HttpPost("GetSteamPrice")]
     [Limit(30)]
-    //[Authorize]
+    [Authorize]
     public IActionResult GetSteamPrice([FromBody] string steamHashName)
     {
         if (string.IsNullOrWhiteSpace(steamHashName)) return BadRequest("Steam hash name is required");
@@ -95,7 +95,7 @@ public class ExternalController(ISteamPriceQueueService steamPriceQueueService, 
     }
 
     [HttpGet("GetSteamPriceStatus/{taskId}")]
-    //[Authorize]
+    [Authorize]
     public IActionResult GetSteamPriceStatus(string taskId)
     {
         var status = _steamPriceQueueService.GetTaskStatus(taskId);
