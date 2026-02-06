@@ -48,11 +48,23 @@ public static class DependencyInjection
 
         services.AddScoped<IExternalLogic, ExternalLogic>();
 
+        // Steam Queue Service
+        services.AddSingleton<SteamPriceQueueService>();
+        services.AddSingleton<ISteamPriceQueueService>(sp => sp.GetRequiredService<SteamPriceQueueService>());
+
+        // HttpClient para Steam API
+        services.AddHttpClient("SteamAPI", client =>
+        {
+            client.Timeout = TimeSpan.FromSeconds(10);
+            client.DefaultRequestHeaders.Add("User-Agent", "SkinHolderAPI/1.0");
+        });
+
         // Singletons
         services.AddSingleton<TokenLogic>();
 
         // Background Services
         services.AddHostedService<LogCleanupService>();
+        services.AddHostedService<SteamPriceWorker>();
 
         // Mapper
         services.AddAutoMapper(typeof(MappingProfile));

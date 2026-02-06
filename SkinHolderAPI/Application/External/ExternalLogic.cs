@@ -13,7 +13,6 @@ public interface IExternalLogic
     Task<string> GetFaceitBansAsync(string playerId);
     Task<ExtensionUsageDto?> GetExtensionUsageAsync();
     Task<string> GetGamerPayPricesAsync();
-    Task<string> GetSteamPriceAsync(string marketHashName, string country = "ES", int currency = 3, int appId = 730);
 }
 
 public class ExternalLogic(IConfiguration config, ILogLogic logLogic, IConfiguration configuration, IExternalDataService externalDataService) : IExternalLogic
@@ -24,8 +23,6 @@ public class ExternalLogic(IConfiguration config, ILogLogic logLogic, IConfigura
     public readonly IExternalDataService _externalDataService = externalDataService;
     private const string FaceitPublicApi = "https://open.faceit.com/data/v4";
     private const string FaceitPrivateApi = "https://api.faceit.com";
-    private const int SteamMaxRetryAttempts = 5;
-    private const string SteamBaseUrl = "https://steamcommunity.com/market/priceoverview/?country={0}&currency={1}&appid={2}&market_hash_name={3}";
 
     #region extension
     public async Task<string> GetPlayerInfoAsync(string playerId)
@@ -196,35 +193,6 @@ public class ExternalLogic(IConfiguration config, ILogLogic logLogic, IConfigura
         {
             return string.Empty;
         }
-    }
-
-    public async Task<string> GetSteamPriceAsync(string marketHashName, string country = "ES", int currency = 3, int appId = 730)
-    {
-        var url = string.Format(SteamBaseUrl, country, currency, appId, marketHashName);
-        var attempts = 0;
-
-        using var Client = new HttpClient();
-        while (attempts <= SteamMaxRetryAttempts)
-        {
-            try
-            {
-                var response = await Client.GetAsync(url);
-                if (response.IsSuccessStatusCode)
-                {
-                    var responseContent = await response.Content.ReadAsStringAsync();
-
-                    return responseContent;
-                }
-            }
-            catch
-            {
-                return string.Empty;
-            }
-
-            attempts++;
-        }
-
-        return string.Empty;
     }
     #endregion
 }

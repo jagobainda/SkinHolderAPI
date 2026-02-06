@@ -2,13 +2,15 @@
 using Microsoft.AspNetCore.Mvc;
 using SkinHolderAPI.Application.External;
 using SkinHolderAPI.Attributes;
+using System.Text.Json;
 
 namespace SkinHolderAPI.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class ExternalController(IExternalLogic externalLogic) : ControllerBase
+public class ExternalController(ISteamPriceQueueService steamPriceQueueService, IExternalLogic externalLogic) : ControllerBase
 {
+    private readonly ISteamPriceQueueService _steamPriceQueueService = steamPriceQueueService;
     private readonly IExternalLogic _externalLogic = externalLogic;
 
     [HttpPost("GetPlayerInfo")]
@@ -44,13 +46,13 @@ public class ExternalController(IExternalLogic externalLogic) : ControllerBase
 
         var combinedData = new
         {
-            playerData = System.Text.Json.JsonSerializer.Deserialize<System.Text.Json.JsonElement>(playerData),
+            playerData = JsonSerializer.Deserialize<JsonElement>(playerData),
             stats = new
             {
-                csgo = string.IsNullOrEmpty(results[0]) ? (object?)null : System.Text.Json.JsonSerializer.Deserialize<System.Text.Json.JsonElement>(results[0]),
-                cs2 = string.IsNullOrEmpty(results[1]) ? (object?)null : System.Text.Json.JsonSerializer.Deserialize<System.Text.Json.JsonElement>(results[1])
+                csgo = string.IsNullOrEmpty(results[0]) ? (object?)null : JsonSerializer.Deserialize<JsonElement>(results[0]),
+                cs2 = string.IsNullOrEmpty(results[1]) ? (object?)null : JsonSerializer.Deserialize<JsonElement>(results[1])
             },
-            bans = string.IsNullOrEmpty(results[2]) ? (object?)null : System.Text.Json.JsonSerializer.Deserialize<System.Text.Json.JsonElement>(results[2])
+            bans = string.IsNullOrEmpty(results[2]) ? (object?)null : JsonSerializer.Deserialize<JsonElement>(results[2])
         };
 
         return Ok(combinedData);
@@ -82,13 +84,27 @@ public class ExternalController(IExternalLogic externalLogic) : ControllerBase
 
     [HttpPost("GetSteamPrice")]
     [Limit(30)]
-    [Authorize]
-    public async Task<IActionResult> GetSteamPrice([FromBody] string steamHashName)
+    //[Authorize]
+    public IActionResult GetSteamPrice([FromBody] string steamHashName)
     {
-        var result = await _externalLogic.GetSteamPriceAsync(steamHashName);
+        if (string.IsNullOrWhiteSpace(steamHashName)) return BadRequest("Steam hash name is required");
 
-        if (string.IsNullOrEmpty(result)) return NoContent();
+        var taskId = _steamPriceQueueService.EnqueueRequest(steamHashName);
+        
+        return Accepted(new { taskId, status = "queued", message = "Request queued for processing" });
+    }
 
-        return Ok(result);
+    [HttpGet("GetSteamPriceStatus/{taskId}")]
+    //[Authorize]
+    public IActionResult GetSteamPriceStatus(string taskId)
+    {
+        var status = _steamPriceQueueService.GetTaskStatus(taskId);
+        
+        if (status == null)
+        {
+            return NotFound(new { error = "Task not found or expired" });
+        }
+        
+        return Ok(status);
     }
 }
