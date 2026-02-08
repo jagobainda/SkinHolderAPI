@@ -158,7 +158,7 @@ public class ExternalLogic(IConfiguration config, ILogLogic logLogic, IConfigura
             TotalRequests3m = totalRequests3m,
             AvgDailyRequests1m = (int)Math.Ceiling(oneMonthCount / daysCount1m),
             TotalRequests1m = oneMonthCount,
-            RequestsGrowthRateLastMonth = totalRequests3m == 0 ? 0 : (oneMonthCount - twoMonthCount) / (double)totalRequests3m * 100,
+            RequestsGrowthRateLastMonth = twoMonthCount == 0 ? 0 : Math.Round((oneMonthCount - twoMonthCount) / (double)twoMonthCount * 100, 1),
             MaxRequestsInADay3m = maxRequestsInADay,
             LastUpdatedUtc = now
         };
