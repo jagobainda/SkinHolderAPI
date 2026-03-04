@@ -160,7 +160,7 @@ public class ExternalLogic(IConfiguration config, ILogLogic logLogic, IConfigura
             TotalRequests1m = oneMonthCount,
             RequestsGrowthRateLastMonth = twoMonthCount == 0 ? 0 : Math.Round((oneMonthCount - twoMonthCount) / (double)twoMonthCount * 100, 1),
             MaxRequestsInADay3m = maxRequestsInADay,
-            LastUpdatedUtc = now
+            LastUpdated = now
         };
 
         return extensionUsageDto;
