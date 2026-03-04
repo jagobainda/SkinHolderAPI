@@ -100,10 +100,7 @@ public class ExternalController(ISteamPriceQueueService steamPriceQueueService, 
     {
         var status = _steamPriceQueueService.GetTaskStatus(taskId);
         
-        if (status == null)
-        {
-            return NotFound(new { error = "Task not found or expired" });
-        }
+        if (status == null) return NotFound(new { error = "Task not found or expired" });
         
         return Ok(status);
     }

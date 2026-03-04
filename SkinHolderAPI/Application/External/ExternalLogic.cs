@@ -127,7 +127,7 @@ public class ExternalLogic(IConfiguration config, ILogLogic logLogic, IConfigura
 
         if (logs == null || logs.Count == 0) return null;
 
-        var now = DateTime.UtcNow;
+        var now = DateTime.Now;
         var threeMonthsAgo = now.AddMonths(-3);
         var twoMonthsAgo = now.AddMonths(-2);
         var oneMonthAgo = now.AddMonths(-1);

@@ -8,5 +8,5 @@ public class ExtensionUsageDto
     public int TotalRequests1m { get; set; }
     public double RequestsGrowthRateLastMonth { get; set; } 
     public int MaxRequestsInADay3m { get; set; }
-    public DateTime LastUpdatedUtc { get; set; }
+    public DateTime LastUpdated { get; set; }
 }
