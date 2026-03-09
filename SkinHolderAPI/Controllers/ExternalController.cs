@@ -46,13 +46,13 @@ public class ExternalController(ISteamPriceQueueService steamPriceQueueService, 
 
         var combinedData = new
         {
-            playerData = JsonSerializer.Deserialize<JsonElement>(playerData),
+            playerData = TryDeserializeJson(playerData),
             stats = new
             {
-                csgo = string.IsNullOrEmpty(results[0]) ? (object?)null : JsonSerializer.Deserialize<JsonElement>(results[0]),
-                cs2 = string.IsNullOrEmpty(results[1]) ? (object?)null : JsonSerializer.Deserialize<JsonElement>(results[1])
+                csgo = TryDeserializeJson(results[0]),
+                cs2 = TryDeserializeJson(results[1])
             },
-            bans = string.IsNullOrEmpty(results[2]) ? (object?)null : JsonSerializer.Deserialize<JsonElement>(results[2])
+            bans = TryDeserializeJson(results[2])
         };
 
         return Ok(combinedData);
@@ -103,5 +103,19 @@ public class ExternalController(ISteamPriceQueueService steamPriceQueueService, 
         if (status == null) return NotFound(new { error = "Task not found or expired" });
         
         return Ok(status);
+    }
+
+    [NonAction]
+    private static JsonElement? TryDeserializeJson(string? json)
+    {
+        if (string.IsNullOrEmpty(json)) return null;
+        try
+        {
+            return JsonSerializer.Deserialize<JsonElement>(json);
+        }
+        catch (JsonException)
+        {
+            return null;
+        }
     }
 }
