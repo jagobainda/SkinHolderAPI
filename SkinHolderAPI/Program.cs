@@ -27,7 +27,7 @@ public class Program
                 builder.Configuration.GetConnectionString("LogConnection"),
                 new MySqlServerVersion(new Version(8, 0, 42))));
 
-        builder.Services.AddApplicationServices();
+        builder.Services.AddApplicationServices(builder.Configuration);
 
         builder.Services.AddCors(options =>
         {

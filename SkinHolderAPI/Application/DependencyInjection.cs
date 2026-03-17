@@ -1,4 +1,5 @@
-﻿using SkinHolderAPI.Application.Apis;
+﻿using AutoMapper.Internal;
+using SkinHolderAPI.Application.Apis;
 using SkinHolderAPI.Application.Background;
 using SkinHolderAPI.Application.External;
 using SkinHolderAPI.Application.ItemPrecio;
@@ -22,7 +23,7 @@ namespace SkinHolderAPI.Application;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddApplicationServices(this IServiceCollection services)
+    public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
     {
         // DataServives
         services.AddScoped<ILogDataService, LogDataService>();
@@ -67,7 +68,12 @@ public static class DependencyInjection
         services.AddHostedService<SteamPriceWorker>();
 
         // Mapper
-        services.AddAutoMapper(typeof(MappingProfile));
+        services.AddAutoMapper(cfg =>
+        {
+            cfg.LicenseKey = configuration["AutoMapper:LicenseKey"];
+            cfg.Internal().ForAllMaps((typeMap, map) => { map.MaxDepth(64); });
+            cfg.AddProfile<MappingProfile>();
+        });
 
         return services;
     }
