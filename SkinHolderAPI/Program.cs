@@ -18,14 +18,12 @@ public class Program
         builder.Services.AddSwaggerGen();
 
         builder.Services.AddDbContext<SkinHolderDbContext>(options =>
-            options.UseMySql(
-                builder.Configuration.GetConnectionString("DefaultConnection"),
-                new MySqlServerVersion(new Version(8, 0, 42))));
+            options.UseMySQL(
+                builder.Configuration.GetConnectionString("DefaultConnection")!));
 
         builder.Services.AddDbContext<SkinHolderLogDbContext>(options =>
-            options.UseMySql(
-                builder.Configuration.GetConnectionString("LogConnection"),
-                new MySqlServerVersion(new Version(8, 0, 42))));
+            options.UseMySQL(
+                builder.Configuration.GetConnectionString("LogConnection")!));
 
         builder.Services.AddApplicationServices(builder.Configuration);
 

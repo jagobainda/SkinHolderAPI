@@ -23,8 +23,7 @@ public partial class SkinHolderLogDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder
-            .UseCollation("utf8mb4_unicode_ci")
-            .HasCharSet("utf8mb4");
+            .UseCollation("utf8mb4_unicode_ci");
 
         modelBuilder.Entity<Logger>(entity =>
         {
