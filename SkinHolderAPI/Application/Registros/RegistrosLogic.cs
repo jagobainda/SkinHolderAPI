@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+﻿using MapsterMapper;
 using SkinHolderAPI.Application.Shared;
 using SkinHolderAPI.DataService.Registros;
 using SkinHolderAPI.DTOs.Registros;
@@ -26,7 +26,7 @@ public class RegistrosLogic(IRegistrosDataService registrosDataService, IMapper 
 
         if (registros == null) return [];
 
-        return [.. registros.Select(_mapper.Map<RegistroDto>)];
+        return [.. registros.Select(r => _mapper.Map<RegistroDto>(r))];
     }
 
     public async Task<RegistroDto?> GetRegistroAsync(long registroId)

@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+﻿using MapsterMapper;
 using SkinHolderAPI.Application.Shared;
 using SkinHolderAPI.DataService.Apis;
 using SkinHolderAPI.DTOs.ApiQuery;

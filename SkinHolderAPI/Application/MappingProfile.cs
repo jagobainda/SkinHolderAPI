@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+﻿using Mapster;
 using SkinHolderAPI.DTOs.ItemPrecio;
 using SkinHolderAPI.DTOs.Items;
 using SkinHolderAPI.DTOs.Login;
@@ -8,28 +8,29 @@ using SkinHolderAPI.Models;
 
 namespace SkinHolderAPI.Application;
 
-public class MappingProfile : Profile
+public class MappingProfile : IRegister
 {
-    public MappingProfile()
+    public void Register(TypeAdapterConfig config)
     {
         // Login
-        CreateMap<User, LoginResultDto>();
+        config.NewConfig<User, LoginResultDto>();
 
         // Items
-        CreateMap<Item, ItemDto>();
+        config.NewConfig<Item, ItemDto>();
 
         // UserItems
-        CreateMap<Useritem, UserItemDto>()
-            .ForMember(dest => dest.ItemName, opt => opt.MapFrom(src => src.Item.Nombre))
-            .ForMember(dest => dest.SteamHashName, opt => opt.MapFrom(src => src.Item.Hashnamesteam))
-            .ForMember(dest => dest.GamerPayName, opt => opt.MapFrom(src => src.Item.Gamerpaynombre))
-            .ForMember(dest => dest.CSFloatMarketHashName, opt => opt.MapFrom(src => src.Item.Nombre));
-        CreateMap<UserItemDto, Useritem>().ForMember(dest => dest.Preciomediocompra, opt => opt.MapFrom(src => 0.0));
+        config.NewConfig<Useritem, UserItemDto>()
+            .Map(dest => dest.ItemName, src => src.Item.Nombre)
+            .Map(dest => dest.SteamHashName, src => src.Item.Hashnamesteam)
+            .Map(dest => dest.GamerPayName, src => src.Item.Gamerpaynombre)
+            .Map(dest => dest.CSFloatMarketHashName, src => src.Item.Nombre);
+        config.NewConfig<UserItemDto, Useritem>()
+            .Map(dest => dest.Preciomediocompra, src => 0.0);
 
         // Registros
-        CreateMap<Registro, RegistroDto>().ReverseMap();
+        config.NewConfig<Registro, RegistroDto>().TwoWays();
 
         // ItemPrecio
-        CreateMap<Itemprecio, ItemPrecioDto>().ReverseMap();
+        config.NewConfig<Itemprecio, ItemPrecioDto>().TwoWays();
     }
 }

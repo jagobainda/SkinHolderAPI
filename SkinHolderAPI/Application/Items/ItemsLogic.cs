@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+﻿using MapsterMapper;
 using SkinHolderAPI.Application.Shared;
 using SkinHolderAPI.DataService.Items;
 using SkinHolderAPI.DTOs.Items;
@@ -20,6 +20,6 @@ public class ItemsLogic(IItemsDataService itemsDataService, IMapper mapper, ICon
 
         if (items == null) return [];
 
-        return [.. items.Select(_mapper.Map<ItemDto>).OrderBy(i => i.Nombre)];
+        return [.. items.Select(i => _mapper.Map<ItemDto>(i)).OrderBy(i => i.Nombre)];
     }
 }

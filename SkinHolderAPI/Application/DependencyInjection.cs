@@ -1,4 +1,5 @@
-﻿using AutoMapper.Internal;
+﻿using Mapster;
+using MapsterMapper;
 using SkinHolderAPI.Application.Apis;
 using SkinHolderAPI.Application.Background;
 using SkinHolderAPI.Application.External;
@@ -68,12 +69,10 @@ public static class DependencyInjection
         services.AddHostedService<SteamPriceWorker>();
 
         // Mapper
-        services.AddAutoMapper(cfg =>
-        {
-            cfg.LicenseKey = configuration["AutoMapper:LicenseKey"];
-            cfg.Internal().ForAllMaps((typeMap, map) => { map.MaxDepth(64); });
-            cfg.AddProfile<MappingProfile>();
-        });
+        var mapsterConfig = TypeAdapterConfig.GlobalSettings;
+        mapsterConfig.Scan(typeof(DependencyInjection).Assembly);
+        services.AddSingleton(mapsterConfig);
+        services.AddSingleton<IMapper, ServiceMapper>();
 
         return services;
     }

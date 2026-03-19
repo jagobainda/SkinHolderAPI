@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+﻿using MapsterMapper;
 using SkinHolderAPI.Application.Shared;
 using SkinHolderAPI.DataService.ItemPrecio;
 using SkinHolderAPI.DTOs.ItemPrecio;
@@ -23,14 +23,14 @@ public class ItemPrecioLogic(IItemPrecioDataService itemPrecioDataService, IMapp
 
         if (itemPrecios == null) return [];
 
-        return [.. itemPrecios.Select(_mapper.Map<ItemPrecioDto>)];
+        return [.. itemPrecios.Select(ip => _mapper.Map<ItemPrecioDto>(ip))];
     }
 
     public async Task<bool> CreateItemPreciosAsync(List<ItemPrecioDto> itemPreciosDto)
     {
         if (itemPreciosDto == null || itemPreciosDto.Count == 0) return false;
 
-        var itemPrecios = itemPreciosDto.Select(_mapper.Map<Itemprecio>).ToList();
+        var itemPrecios = itemPreciosDto.Select(ip => _mapper.Map<Itemprecio>(ip)).ToList();
 
         return await _itemPrecioDataService.CreateItemPreciosAsync(itemPrecios);
     }

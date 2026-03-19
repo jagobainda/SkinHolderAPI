@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+﻿using MapsterMapper;
 using Microsoft.IdentityModel.Tokens;
 using SkinHolderAPI.Application.Shared;
 using SkinHolderAPI.Models;
