@@ -40,6 +40,7 @@ public class ItemPrecioController(IItemPrecioLogic itemPrecioLogic, IRegistrosLo
     public async Task<IActionResult> Create([FromBody] List<ItemPrecioDto> itemPreciosDto)
     {
         if (itemPreciosDto == null || itemPreciosDto.Count == 0) return BadRequest("ItemPrecios list cannot be null or empty");
+        if (itemPreciosDto.Count > 250) return BadRequest("Too many items in the list.");
 
         var firstRegistroId = itemPreciosDto.First().Registroid;
 

@@ -17,6 +17,8 @@ public class ApiQueryController(IApiQueryLogic apiQueryLogic) : ControllerBase
     public async Task<IActionResult> GetGamerPayPrices([FromBody] List<string> itemNames)
     {
         if (itemNames == null || itemNames.Count == 0) return BadRequest("Item names cannot be null or empty.");
+        if (itemNames.Count > 250) return BadRequest("Too many item names.");
+        if (itemNames.Any(n => string.IsNullOrWhiteSpace(n) || n.Length > 300)) return BadRequest("Invalid item name detected.");
 
         var prices = await _apiQueryLogic.GetGamerPayItemPricesAsync(itemNames);
 
@@ -28,6 +30,8 @@ public class ApiQueryController(IApiQueryLogic apiQueryLogic) : ControllerBase
     public async Task<IActionResult> GetCSFloatPrices([FromBody] List<string> itemNames)
     {
         if (itemNames == null || itemNames.Count == 0) return BadRequest("Item names cannot be null or empty.");
+        if (itemNames.Count > 250) return BadRequest("Too many item names.");
+        if (itemNames.Any(n => string.IsNullOrWhiteSpace(n) || n.Length > 300)) return BadRequest("Invalid item name detected.");
 
         var prices = await _apiQueryLogic.GetCSFloatItemPricesAsync(itemNames);
 

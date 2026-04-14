@@ -18,7 +18,7 @@ public class ExternalController(ISteamPriceQueueService steamPriceQueueService, 
     [AllowAnonymous]
     public async Task<IActionResult> GetPlayerInfo([FromBody] string playerId)
     {
-        if (playerId.Length > 25) return BadRequest("Wrong id format");
+        if (string.IsNullOrWhiteSpace(playerId) || playerId.Length > 25) return BadRequest("Wrong id format");
 
         var result = await _externalLogic.GetPlayerInfoAsync(playerId);
 
@@ -32,7 +32,7 @@ public class ExternalController(ISteamPriceQueueService steamPriceQueueService, 
     [AllowAnonymous]
     public async Task<IActionResult> GetFaceitCompleteData([FromBody] string steamId)
     {
-        if (string.IsNullOrEmpty(steamId)) return BadRequest("Steam ID is required");
+        if (string.IsNullOrWhiteSpace(steamId) || steamId.Length > 25) return BadRequest("Steam ID is required");
 
         var (playerData, playerId) = await _externalLogic.GetFaceitPlayerDataAsync(steamId);
 
@@ -87,7 +87,7 @@ public class ExternalController(ISteamPriceQueueService steamPriceQueueService, 
     [Authorize]
     public IActionResult GetSteamPrice([FromBody] string steamHashName)
     {
-        if (string.IsNullOrWhiteSpace(steamHashName)) return BadRequest("Steam hash name is required");
+        if (string.IsNullOrWhiteSpace(steamHashName) || steamHashName.Length > 300) return BadRequest("Invalid steam hash name.");
 
         var taskId = _steamPriceQueueService.EnqueueRequest(steamHashName);
         

@@ -37,6 +37,8 @@ public class UserItemsController(IUserItemsLogic userItemsLogic) : ControllerBas
 
         if (userItem == null) return BadRequest("UserItem cannot be null");
 
+        if (userItem.Cantidad < 1) return BadRequest("Cantidad must be at least 1.");
+
         var success = await _userItemsLogic.CreateUserItemAsync(userItem);
         
         return success ? Ok("User item created successfully.") : BadRequest("Failed to create user item.");
@@ -51,6 +53,8 @@ public class UserItemsController(IUserItemsLogic userItemsLogic) : ControllerBas
         if (userId != userItems.Userid) return BadRequest("User ID mismatch.");
 
         if (userItems == null) return BadRequest("UserItem cannot be null");
+
+        if (userItems.Cantidad < 0) return BadRequest("Cantidad cannot be negative.");
 
         var success = await _userItemsLogic.UpdateUserItemAsync(userItems);
 

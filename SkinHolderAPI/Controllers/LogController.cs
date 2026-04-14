@@ -18,6 +18,7 @@ public class LogController(ILogLogic logLogic) : ControllerBase
     public async Task<IActionResult> AddLog([FromBody] LoggerDto loggerDto)
     {
         if (loggerDto == null) return BadRequest("Log cannot be null.");
+        if (string.IsNullOrWhiteSpace(loggerDto.LogDescription) || loggerDto.LogDescription.Length > 500) return BadRequest("Invalid log description.");
 
         var success = await _logLogic.AddLogAsync(loggerDto);
 
