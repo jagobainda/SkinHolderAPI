@@ -1,8 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SkinHolderAPI.Application.Loggers;
 using SkinHolderAPI.DataService.Contexts;
 using SkinHolderAPI.Models.Logs;
-using SkinHolderAPI.Utils;
 
 namespace SkinHolderAPI.DataService.External;
 
@@ -11,23 +9,20 @@ public interface IExternalDataService
     Task<List<Logger>> GetExtensionUsageAsync();
 }
 
-public class ExternalDataService(SkinHolderLogDbContext context, ILogLogic logLogic) : IExternalDataService
+public class ExternalDataService(SkinHolderLogDbContext context, ILogger<ExternalDataService> logger) : IExternalDataService
 {
     private readonly SkinHolderLogDbContext _context = context;
-    private readonly ILogLogic _logLogic = logLogic;
+    private readonly ILogger<ExternalDataService> _logger = logger;
 
     public async Task<List<Logger>> GetExtensionUsageAsync()
     {
         try
         {
-            var logs = await _context.Loggers.Where(l => l.LogPlaceId == 3).ToListAsync();
-
-            await _logLogic.AddLogAsync(LogBuilder.BuildLoggerDto($"Fetched {logs.Count} extension usage logs", LogType.Info, LogPlace.Api, 1));
-
-            return logs;
+            return await _context.Loggers.Where(l => l.LogPlaceId == 3).ToListAsync();
         }
-        catch
+        catch (Exception ex)
         {
+            _logger.LogError(ex, "Error en GetExtensionUsageAsync al obtener logs de uso de extensión");
             return [];
         }
     }

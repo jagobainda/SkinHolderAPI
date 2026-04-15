@@ -13,10 +13,11 @@ public interface IItemPrecioDataService
     Task<bool> DeleteItemPreciosAsync(long registroId);
 }
 
-public class ItemPrecioDataService(SkinHolderDbContext context, ILogLogic logLogic) : IItemPrecioDataService
+public class ItemPrecioDataService(SkinHolderDbContext context, ILogLogic logLogic, ILogger<ItemPrecioDataService> logger) : IItemPrecioDataService
 {
     private readonly SkinHolderDbContext _context = context;
     private readonly ILogLogic _logLogic = logLogic;
+    private readonly ILogger<ItemPrecioDataService> _logger = logger;
 
     private async Task<T?> SafeExecuteAsync<T>(Func<Task<T>> action, string methodName, int userId = 0)
     {
@@ -26,6 +27,7 @@ public class ItemPrecioDataService(SkinHolderDbContext context, ILogLogic logLog
         }
         catch (Exception ex)
         {
+            _logger.LogError(ex, "Error en {MethodName} para userId={UserId}", methodName, userId);
             await _logLogic.AddLogAsync(LogBuilder.BuildLoggerDto($"Exception in {methodName}: {ex.Message}", LogType.Error, LogPlace.Api, userId));
 
             return default;

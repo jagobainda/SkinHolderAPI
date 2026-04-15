@@ -15,10 +15,11 @@ public interface IRegistrosDataService
     Task<bool> DeleteRegistroAsync(Registro registro);
 }
 
-public class RegistrosDataService(SkinHolderDbContext context, ILogLogic logLogic) : IRegistrosDataService
+public class RegistrosDataService(SkinHolderDbContext context, ILogLogic logLogic, ILogger<RegistrosDataService> logger) : IRegistrosDataService
 {
     private readonly SkinHolderDbContext _context = context;
     private readonly ILogLogic _logLogic = logLogic;
+    private readonly ILogger<RegistrosDataService> _logger = logger;
 
     private async Task<T?> SafeExecuteAsync<T>(Func<Task<T>> action, string methodName, int userId = 0)
     {
@@ -28,6 +29,7 @@ public class RegistrosDataService(SkinHolderDbContext context, ILogLogic logLogi
         }
         catch (Exception ex)
         {
+            _logger.LogError(ex, "Error en {MethodName} para userId={UserId}", methodName, userId);
             await _logLogic.AddLogAsync(
                 LogBuilder.BuildLoggerDto(
                     $"Exception in {methodName}: {ex.Message}",

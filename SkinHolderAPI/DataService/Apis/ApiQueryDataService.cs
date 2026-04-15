@@ -11,9 +11,10 @@ public interface IApiQueryDataService
     Task<List<CSFloatItemDto>> GetCSFloatItemPricesAsync(List<string> marketHashNames, string[] apiKeys);
 }
 
-public class ApiQueryDataService(ILogLogic logLogic) : IApiQueryDataService
+public class ApiQueryDataService(ILogLogic logLogic, ILogger<ApiQueryDataService> logger) : IApiQueryDataService
 {
     private readonly ILogLogic _logLogic = logLogic;
+    private readonly ILogger<ApiQueryDataService> _logger = logger;
 
     public async Task<List<GamerPayItemDto>> GetGamerPayItemPricesAsync(List<string> itemNames)
     {
@@ -47,14 +48,17 @@ public class ApiQueryDataService(ILogLogic logLogic) : IApiQueryDataService
         }
         catch (HttpRequestException ex)
         {
+            _logger.LogError(ex, "HttpRequestException en FetchGamerPayDataAsync");
             await _logLogic.AddLogAsync(LogBuilder.BuildLoggerDto("HttpRequestException in method FetchGamerPayDataAsync(): " + ex.Message, LogType.Error, LogPlace.Api, 1));
         }
         catch (JsonException ex)
         {
+            _logger.LogError(ex, "JsonException en FetchGamerPayDataAsync");
             await _logLogic.AddLogAsync(LogBuilder.BuildLoggerDto("JsonException in method FetchGamerPayDataAsync(): " + ex.Message, LogType.Error, LogPlace.Api, 1));
         }
         catch (Exception ex)
         {
+            _logger.LogError(ex, "Exception en FetchGamerPayDataAsync");
             await _logLogic.AddLogAsync(LogBuilder.BuildLoggerDto("Exception in method FetchGamerPayDataAsync(): " + ex.Message, LogType.Error, LogPlace.Api, 1));
         }
 
@@ -132,6 +136,7 @@ public class ApiQueryDataService(ILogLogic logLogic) : IApiQueryDataService
                     }
                     catch (Exception ex)
                     {
+                        _logger.LogError(ex, "Error con API key index {KeyIndex} para '{MarketHashName}'", currentKeyIndex, marketHashName);
                         await _logLogic.AddLogAsync(LogBuilder.BuildLoggerDto($"Exception with API key index {currentKeyIndex} for '{marketHashName}': {ex.Message}", LogType.Error, LogPlace.Api, 1));
                         currentKeyIndex++;
                     }
@@ -152,6 +157,7 @@ public class ApiQueryDataService(ILogLogic logLogic) : IApiQueryDataService
         }
         catch (HttpRequestException ex)
         {
+            _logger.LogError(ex, "HttpRequestException en GetCSFloatItemPricesAsync");
             await _logLogic.AddLogAsync(LogBuilder.BuildLoggerDto("HttpRequestException in GetCSFloatItemPricesAsync: " + ex.Message, LogType.Error, LogPlace.Api, 1));
 
             return [];

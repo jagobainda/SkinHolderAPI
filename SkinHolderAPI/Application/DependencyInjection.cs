@@ -62,7 +62,6 @@ public static class DependencyInjection
         });
 
         // Singletons
-        services.AddSingleton<TokenLogic>();
 
         // Background Services
         services.AddHostedService<LogCleanupService>();

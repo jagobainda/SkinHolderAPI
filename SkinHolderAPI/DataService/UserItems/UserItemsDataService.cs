@@ -14,10 +14,11 @@ public interface IUserItemsDataService
     Task<bool> DeleteUserItemAsync(long userItemId); 
 }
 
-public class UserItemsDataService(SkinHolderDbContext context, ILogLogic logLogic) : IUserItemsDataService
+public class UserItemsDataService(SkinHolderDbContext context, ILogLogic logLogic, ILogger<UserItemsDataService> logger) : IUserItemsDataService
 {
     private readonly SkinHolderDbContext _context = context;
     private readonly ILogLogic _logLogic = logLogic;
+    private readonly ILogger<UserItemsDataService> _logger = logger;
 
     private async Task<T?> SafeExecuteAsync<T>(Func<Task<T>> action, string methodName, int userId = 0)
     {
@@ -27,6 +28,7 @@ public class UserItemsDataService(SkinHolderDbContext context, ILogLogic logLogi
         }
         catch (Exception ex)
         {
+            _logger.LogError(ex, "Error en {MethodName} para userId={UserId}", methodName, userId);
             await _logLogic.AddLogAsync(
                 LogBuilder.BuildLoggerDto(
                     $"Exception in {methodName}: {ex.Message}",

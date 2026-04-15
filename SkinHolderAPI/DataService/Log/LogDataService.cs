@@ -9,9 +9,10 @@ public interface ILogDataService
     Task<bool> DeleteOldLogsAsync(DateTime cutoffDate);
 }
 
-public class LogDataService(SkinHolderLogDbContext dbContext) : ILogDataService
+public class LogDataService(SkinHolderLogDbContext dbContext, ILogger<LogDataService> logger) : ILogDataService
 {
     private readonly SkinHolderLogDbContext _dbContext = dbContext;
+    private readonly ILogger<LogDataService> _logger = logger;
 
     public async Task<bool> AddLogAsync(Logger logger)
     {
@@ -23,8 +24,9 @@ public class LogDataService(SkinHolderLogDbContext dbContext) : ILogDataService
 
             return true;
         }
-        catch
+        catch (Exception ex)
         {
+            _logger.LogError(ex, "Error en AddLogAsync al persistir log en base de datos");
             return false;
         }
     }
@@ -41,8 +43,9 @@ public class LogDataService(SkinHolderLogDbContext dbContext) : ILogDataService
 
             return true;
         }
-        catch
+        catch (Exception ex)
         {
+            _logger.LogError(ex, "Error en DeleteOldLogsAsync para cutoffDate={CutoffDate}", cutoffDate);
             return false;
         }
     }
