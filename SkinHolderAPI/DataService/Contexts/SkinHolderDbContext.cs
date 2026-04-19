@@ -142,7 +142,9 @@ public partial class SkinHolderDbContext : DbContext
 
             entity.HasIndex(e => e.Userid, "fk_userid_useritems");
 
-            entity.Property(e => e.Useritemid).HasColumnName("useritemid");
+            entity.Property(e => e.Useritemid)
+                .ValueGeneratedOnAdd()
+                .HasColumnName("useritemid");
             entity.Property(e => e.Cantidad).HasColumnName("cantidad");
             entity.Property(e => e.Itemid).HasColumnName("itemid");
             entity.Property(e => e.Preciomediocompra)

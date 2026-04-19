@@ -25,10 +25,7 @@ public class MappingProfile : IRegister
             .Map(dest => dest.GamerPayName, src => src.Item.Gamerpaynombre)
             .Map(dest => dest.CSFloatMarketHashName, src => src.Item.Nombre);
         config.NewConfig<UserItemDto, Useritem>()
-            .Map(dest => dest.Preciomediocompra, src => 0m)
-            .Ignore(dest => dest.Item)
-            .Ignore(dest => dest.User)
-            .Ignore(dest => dest.Itemprecios);
+            .Map(dest => dest.Preciomediocompra, src => 0m);
 
         // Registros
         config.NewConfig<Registro, RegistroDto>().TwoWays();

@@ -59,7 +59,7 @@ public class UserItemsLogic(IUserItemsDataService userItemsDataService, IMapper 
         {
             var userItem = _mapper.Map<Useritem>(userItemDto);
             userItem.Useritemid = 0;
-            userItem.Preciomediocompra = 0;
+            userItem.Preciomediocompra = 0m;
 
             var result = await _userItemsDataService.CreateUserItemAsync(userItem);
 
