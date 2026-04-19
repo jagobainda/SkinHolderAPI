@@ -28,10 +28,13 @@ public class UserItemsDataService(SkinHolderDbContext context, ILogLogic logLogi
         }
         catch (Exception ex)
         {
+            var fullMessage = ex.InnerException != null 
+                ? $"{ex.Message} --> Inner: {ex.InnerException.Message}" 
+                : ex.Message;
             _logger.LogError(ex, "Error en {MethodName} para userId={UserId}", methodName, userId);
             await _logLogic.AddLogAsync(
                 LogBuilder.BuildLoggerDto(
-                    $"Exception in {methodName}: {ex.Message}",
+                    $"Exception in {methodName}: {fullMessage}",
                     LogType.Error,
                     LogPlace.Api,
                     userId
