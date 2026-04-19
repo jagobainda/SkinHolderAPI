@@ -62,6 +62,16 @@ public class UserItemsDataService(SkinHolderDbContext context, ILogLogic logLogi
 
         return await SafeExecuteAsync(async () =>
         {
+            var itemExists = await _context.Items.AnyAsync(i => i.Itemid == userItem.Itemid);
+            _logger.LogWarning("CreateUserItemAsync PRE-INSERT: Itemid={Itemid}, Userid={Userid}, Cantidad={Cantidad}, ItemExists={ItemExists}",
+                userItem.Itemid, userItem.Userid, userItem.Cantidad, itemExists);
+
+            if (!itemExists)
+            {
+                _logger.LogError("CreateUserItemAsync: Itemid={Itemid} no existe en la tabla items", userItem.Itemid);
+                return false;
+            }
+
             await _context.Useritems.AddAsync(userItem);
             await _context.SaveChangesAsync();
             return true;
