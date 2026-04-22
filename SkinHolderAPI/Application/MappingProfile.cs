@@ -16,7 +16,10 @@ public class MappingProfile : IRegister
         config.NewConfig<User, LoginResultDto>();
 
         // Items
-        config.NewConfig<Item, ItemDto>();
+        config.NewConfig<Item, ItemDto>()
+            .Map(dest => dest.ItemId, src => src.Itemid)
+            .Map(dest => dest.HashNameSteam, src => src.Hashnamesteam)
+            .Map(dest => dest.GamerPayNombre, src => src.Gamerpaynombre);
 
         // UserItems
         config.NewConfig<Useritem, UserItemDto>()
