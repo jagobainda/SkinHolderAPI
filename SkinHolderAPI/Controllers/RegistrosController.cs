@@ -28,7 +28,7 @@ public class RegistrosController(IRegistrosLogic registrosLogic) : ControllerBas
     }
 
     [HttpGet]
-    [Limit(5)]
+    [Limit(15)]
     public async Task<IActionResult> Get()
     {
         var userId = GetUserId();
